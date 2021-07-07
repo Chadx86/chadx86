@@ -1,0 +1,4 @@
+
+fasm main.asm
+
+
