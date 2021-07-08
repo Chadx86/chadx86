@@ -1,4 +1,4 @@
-AS = fasm #assembler variable
+AS = fasm # assembler variable
 BUILDDIR = ./build
 SRCDIR = ./src
 
