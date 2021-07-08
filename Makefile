@@ -1,2 +1,10 @@
-main: main.asm
-  fasm src\main.asm build\bootx64.efi
+
+AS=fasm
+BUILDDIR=./build
+SRCDIR=./src
+
+all: main
+
+
+main:
+	$(AS) $(SRCDIR)/main.asm $(BUILDDIR)/bootx64.efi
