@@ -1,3 +1,5 @@
+;holds info for main.asm
+
 section '.data' data readable writeable
 
 align37 64

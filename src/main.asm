@@ -1,9 +1,9 @@
-format PE64 dll EFI
+format PE64 dll EFI ;the format required by uefi to be written in
 
 
 
 stack 65536*2
-entry EntryPoint
+entry EntryPoint ;tells uefi to load entry point
 
 section '.text' code readable executable
 
@@ -15,28 +15,28 @@ align37Must 16
 EntryPoint:
 
 	
-	call saveRegisters
+	call saveRegisters ;save register for later
 
 	call init
-	jc	 error
+	jc	 error ;shouldnt be executed unless uefi is badly written. like really really badly written
 
 	;uefi_call_wrapper ConOut, OutputString, ConOut, BootString
-	mov  rdx, BootStartString
+	mov  rdx, BootStartString ; moves bootstartstring to rdx
 	call Console.Write
 
 	
-	call DisableWatchdogTimer
+	call DisableWatchdogTimer ;its in the name
 
-	mov  rdx, PressAnyKey
-	call Console.Write
+	mov  rdx, PressAnyKey ;moves pressanykey from main_data.asm to rdx
+	call Console.Write; and then writes it to screen
 
-	call Console.WaitForKey
+	call Console.WaitForKey ;chad then will wait for user input via the keyboard
 
 	;mov rcx, 100
 	;call halt
 
 	
-	call loadRegisters
+	call loadRegisters ;reloads the registers from earlier that we saved
 	xor rax, rax
 	RET
 

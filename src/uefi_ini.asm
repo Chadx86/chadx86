@@ -1,3 +1,4 @@
+;provides basic uefi functions
 include 'uefi_struct.asm'
 
 align37 16
