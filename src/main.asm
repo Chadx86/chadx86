@@ -9,7 +9,7 @@ section '.text' code readable executable
 
 include 'uefi_ini.asm'
 
-include 'uefi.inc'
+include 'uefi.inc' ;uefi.inc a library for UEFI written in assembly for FASM
 
 align37Must 16
 
