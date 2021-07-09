@@ -9,6 +9,8 @@ section '.text' code readable executable
 
 include 'uefi_ini.asm'
 
+include 'uefi.inc'
+
 align37Must 16
 
 ; RCX, RDX, R8 and R9
