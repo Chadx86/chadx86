@@ -1,15 +1,12 @@
 format PE64 dll EFI ;the format required by uefi to be written in
 
-
-
 stack 65536*2
+
 entry EntryPoint ;tells uefi to load entry point
 
 section '.text' code readable executable
 
 include 'uefi_ini.asm'
-
-include 'uefi.inc' ;uefi.inc a library for UEFI written in assembly for FASM
 
 align37Must 16
 
