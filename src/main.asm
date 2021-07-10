@@ -17,6 +17,9 @@ EntryPoint:
 	call saveRegisters ;save register for later
 
 	call init
+	
+	; jc is Jump if carry set
+	
 	jc	 error ;shouldnt be executed unless uefi is badly written. like really really badly written
 
 	;uefi_call_wrapper ConOut, OutputString, ConOut, BootString
