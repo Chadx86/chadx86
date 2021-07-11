@@ -1,4 +1,7 @@
 ;provides basic uefi functions
+
+;we can just call Console.WaitForKey in main.asm, this will make it shorter and make life alot more easier
+
 include 'uefi_header.asm'
 
 align37 16
