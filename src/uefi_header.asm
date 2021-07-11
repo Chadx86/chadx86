@@ -1,3 +1,5 @@
+; creating uefi headers to use for the bootloader
+
 macro struct name
 {
   virtual at 0
@@ -112,6 +114,8 @@ struct SIMPLE_INPUT_INTERFACE
 
 struc EFI_BOOT_SERVICES_TABLE
 {
+	;dpt = data pointer and is meant for pointing to data
+
 	.Hdr		       			EFI_TABLE_HEADER
 	.RaisePriority				dptr
 	.RestorePriority			dptr
