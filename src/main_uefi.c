@@ -1,7 +1,13 @@
 //Alot of the comments are from the UEFI Specs 2.9, some comments are added in
 
+#define EFI_SUCCESS 0; //Also similar to Return 0, you could use that if you'd like
+
 //UEFI Data Types
-typedef unsigned short int uint16_t; //uint16 is UINT16 for uefi
+typedef unsigned short int uint16_t; //2 byte unsigned integer
+
+typedef unsigned int uint32_t; //4 byte unsigned integer
+
+typedef uint32_t EFI_STATUS;
 
 //We are using and unsigned short int since that is equal to 16 bits
 
