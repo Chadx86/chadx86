@@ -1,5 +1,5 @@
 # chadx86
-UEFI Based Bootloader for x86 and x64 systems.
+UEFI Bootloader for x86 and x64 systems (may be multiboot)
 
 ## Requirements to build chadx86
 Assembly compiler called "fasm"
