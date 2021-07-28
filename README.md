@@ -1,6 +1,12 @@
 # chadx86
 UEFI Bootloader for x86 and x64 systems (may be multiboot)
 
+All of the x86 assembly was written by 0xol
+
+Makefile written by InsaneMiner
+
+main_uefi.c and uefi.h written by PedroElFrijol
+
 ## Requirements to build chadx86
 Assembly compiler called "fasm"
 
