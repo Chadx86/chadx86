@@ -1,3 +1,5 @@
+#this is for the x86 assembly code
+
 AS = fasm # assembler variable
 BUILDDIR = ./build
 SRCDIR = ./src
