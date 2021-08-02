@@ -1,9 +1,10 @@
 #this is for the x86 assembly code
 
-AS = fasm # assembler variable
+AS = fasm #assembler variable
 BUILDDIR = ./build
-SRCDIR = ./src
+SRCDIR = ./src_asm
 CC = gcc
 
 main: 
-	@$(AS) $(SRCDIR)/main.asm $(BUILDDIR)/bootx64.efi # also equal to fasm src\main.asm build\bootx64.efi
+	@$(AS) $(SRCDIR)/main.asm $(BUILDDIR)/bootx64.efi 
+#also equal to fasm src\main.asm build\bootx64.efi

@@ -2,7 +2,6 @@
 //UEFI Specs is the reference I used for the code (PedroElFrijol)
 
 #define EFI_SUCCESS 0; //Also similar to Return 0, you could use that if you'd like
-
 //UEFI Data Types
 typedef unsigned short int uint16_t; //2 byte unsigned integer
 
@@ -40,7 +39,7 @@ typedef unsigned long long UINT64; //8-byte unsigned value
 
 //It is set to long long instead of int because it is 8 bytes (64 bits) and it is larger
 
-tyoedef UINT64 EFI_STATUS;
+typedef UINT64 EFI_STATUS;
 
 typedef void *EFI_HANDLE; //A collection of related interfaces
 
@@ -60,12 +59,11 @@ typedef struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL //Output text
 
 typedef struct EFI_SYSTEM_TABLE
 {
-    EFI_TABLE_HEADER hrd;
-    CHAR16 *FirmwareVendor;
-    UINT32 FirmwareVersion;
-    EFI_HANDLE ConsoleInHandle;
-    EFI_SIMPLE_TEXT_INPUT_PROTOCOL *ConIn; //EFI_SIMPLE_TEXT_INPUT_PROTOCOL is similar to ConIn in c++
+    EFI_TABLE_HEADER Hdr; //The table header for the EFI System Table
+    CHAR16 *FirmwareVendor; //A pointer to a null terminated string that identifies the vendor that produces the system firmware for the platform.
+    UINT32 FirmwareVersion; //A firmware vendor specific value that identifies the revision of the system firmware for the platform.
+    EFI_HANDLE ConsoleInHandle; //The handle for the active console input device, if there is no active console, these protocols must still be present
+    EFI_SIMPLE_TEXT_INPUT_PROTOCOL *ConIn; //A pointer to the EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL interface that is associated with ConsoleOutHandle.
     EFI_HANDLE ConsoleOutHandle;
-    EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *ConOut; //EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL is similar to ConOut in c++
-  
-} EFI_SYSTEM_TABLE ;
+    EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *ConOut; //A pointer to the EFI_SIMPLE_TEXT_INPUT_PROTOCOL interface that is associated with ConsoleInHandle.
+} EFI_SYSTEM_TABLE;
