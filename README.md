@@ -5,7 +5,7 @@ All of the x86 assembly was written by 0xol
 
 Makefile written by InsaneMiner
 
-main_uefi.c and uefi.h written by PedroElFrijol
+The chadx86 logo, main_uefi.c, uefi.h created by PedroElFrijol
 
 ## Requirements to build chadx86
 Assembly compiler called "fasm"
