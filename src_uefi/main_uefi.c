@@ -1,4 +1,4 @@
-#include "uefi.h"
+#include <uefi.h>
 
 typedef EFI_STATUS main_uefi(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable)
 {
