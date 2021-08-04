@@ -49,11 +49,21 @@ typedef unsigned char BOOLEAN; //Logical Boolean. 1-byte value containing a 0 fo
 
 typedef uint16_t CHAR16; //2-byte Character
 
+typedef struct EFI_TABLE_HEADER
+{
+    UINT64 Signature;
+    UINT32 Revision;
+    UINT32 HeaderSize;
+    UINT32 CRC32;
+    UINT32 Reserved;
+} EFI_TABLE_HEADER;
+
+typedef EFI_STATUS (*EFI_TEXT_STRING)(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, IN CHAR16 *String);
+
 struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL; //Protocol interfaces for devices that support console style text displaying.
 
 typedef struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL //Output text
 {
-    EFI_TEXT_RESET Reset;
     EFI_TEXT_STRING OutputString;
 } EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
 
