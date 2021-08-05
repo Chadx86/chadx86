@@ -8,8 +8,8 @@ Makefile written by InsaneMiner
 The chadx86 logo, main_uefi.c, uefi.h created by PedroElFrijol
 
 ## Requirements to build chadx86
- - Assembly compiler called "fasm"
- - mingw-w64 c compiler
+ - Assembler called "fasm"
+ - mingw-w64 C compiler
  - QEMU Virtual Machine
  - GNU Make
   
