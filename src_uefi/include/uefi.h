@@ -58,13 +58,31 @@ typedef struct EFI_TABLE_HEADER
     UINT32 Reserved;
 } EFI_TABLE_HEADER;
 
-typedef EFI_STATUS (*EFI_TEXT_STRING)(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, IN CHAR16 *String);
+typedef unsigned short int  uint16_t;
+typedef unsigned short int  uint_least16_t;
+typedef uint_least16_t          CHAR16;
 
-struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL; //Protocol interfaces for devices that support console style text displaying.
+typedef unsigned int        UINT32;
+typedef unsigned long long  UINT64;
 
-typedef struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL //Output text
+typedef unsigned char       BOOLEAN;
+
+typedef void                *EFI_HANDLE;
+typedef UINT64              EFI_STATUS;
+
+
+typedef struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL {} EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
+
+struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
+
+typedef EFI_STATUS (*EFI_TEXT_RESET)(struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, BOOLEAN ExtendedVerification);
+
+typedef EFI_STATUS (*EFI_TEXT_STRING)(struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, CHAR16 *String);
+
+typedef struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
 {
-    EFI_TEXT_STRING OutputString;
+    EFI_TEXT_RESET      Reset;
+    EFI_TEXT_STRING     OutputString;
 } EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
 
 typedef struct EFI_SYSTEM_TABLE

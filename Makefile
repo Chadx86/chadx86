@@ -3,7 +3,7 @@ AS = fasm
 BUILDDIR=bin
 SRCDIR=src_uefi
 CFLAGS=-Wall  -Werror -fno-builtin -m64 -mabi=ms -nostdlib -ffreestanding -I$(SRCDIR)/include
-LFLAGS=-Wall -Werror -m64 -fno-builtin -ffreestanding -mabi=ms -nostdlib -shared -Wl,-dll -Wl,--subsystem,10 -e efi_main
+LFLAGS=-Wall -Werror -m64 -fno-builtin -ffreestanding -mabi=ms -nostdlib -shared -Wl,-dll -Wl,--subsystem,10 -e main_uefi
 CFILES  = $(shell find $(SRCDIR) -name '*.c')
 OBJ = $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.o,$(CFILES))
 ASMFILES  = $(shell find $(SRCDIR) -name '*.s')
