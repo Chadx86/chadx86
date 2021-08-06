@@ -10,7 +10,7 @@ ASMFILES  = $(shell find $(SRCDIR) -name '*.s')
 OBJ  += $(patsubst $(SRCDIR)/%.s,$(BUILDDIR)/%.s.o,$(ASMFILES))
 
 
-all: build
+all: build disk
 
 build: BOOTX64.EFI
 
@@ -32,5 +32,17 @@ $(BUILDDIR)/%.s.o: $(SRCDIR)/%.s
 	@echo [$(AS)][$<]
 	@$(AS) $(ASFLAGS) $< -o $@
 
+disk: build
+	-@mkdir ./disk
+	-@mkdir ./disk/EFI
+	-@mkdir ./disk/EFI/Boot
+	-@cp ./BOOTX64.EFI ./disk/EFI/Boot
+	python3 imgbuilder.py disk disk.img
+
 clean:
-	@rm -rf $(BUILDDIR) *.EFI
+	@rm -rf $(BUILDDIR) *.EFI disk
+	-@mdeltree -i disk.img ::
+
+
+run: disk
+	qemu-system-x86_64 -drive format=raw,unit=0,file=disk.img -bios bios64.bin -m 256M -vga std -machine q35
