@@ -7,6 +7,10 @@ Makefile written by InsaneMiner
 
 The chadx86 logo, main_uefi.c, uefi.h created by PedroElFrijol
 
+##Things being worked on
+ - GOP and printing text to the screen
+ - Boot a kernel with the bootloader
+
 ## Requirements to build chadx86
  - Assembler called "fasm"
  - Mingw-w64 C compiler
