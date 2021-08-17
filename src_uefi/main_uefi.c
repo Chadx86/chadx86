@@ -13,7 +13,7 @@ EFI_STATUS main_uefi(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable)
     Status = SystemTable->BootServices->LocateProtocol(&EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID, 0, (void**)&gop);
     if(Status == EFI_SUCCESS)
     {
-        Print(L"The GOP has been loaded successfully!");
+      Print(L"The GOP has been loaded successfully!");
     }
   
   while (1){};
