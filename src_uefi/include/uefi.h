@@ -2,6 +2,7 @@
 //UEFI Specs is the reference I used for the code (PedroElFrijol)
 
 #define EFI_SUCCESS 0 //Also similar to Return 0, you could use that if you'd like
+#define EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID \ {0x9042a9de,0x23dc,0x4a38,\  {0x96,0xfb,0x7a,0xde,0xd0,0x80,0x51,0x6a}}
 
 //UEFI Data Types
 typedef unsigned short int uint16_t; //2 byte unsigned integer
@@ -41,6 +42,8 @@ typedef unsigned long long UINT64; //8-byte unsigned value
 //It is set to long long instead of int because it is 8 bytes (64 bits) and it is larger
 
 typedef UINT64 EFI_STATUS;
+
+typedef void *EFI_EVENT;
 
 typedef void *EFI_HANDLE; //A collection of related interfaces
 
@@ -87,6 +90,15 @@ typedef struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
     EFI_TEXT_RESET      Reset;
     EFI_TEXT_STRING     OutputString;
 } EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
+
+typedef struct {  
+    EFI_TABLE_HEADER             Hdr;
+ } EFI_RUNTIME_SERVICES;
+
+ typedef struct{ 
+    EFI_GUID            VendorGuid; //The 128-bit GUID value that uniquely identifies the system configuration table.
+    void               *VendorTable; //A pointer to the table associated with VendorGuid
+} EFI_CONFIGURATION_TABLE;
 
 typedef struct EFI_SYSTEM_TABLE
 {
@@ -179,7 +191,70 @@ typedef struct {
     UINTN FrameBufferSize; //Amount of frame buffer needed to support the active mode as defined by PixelsPerScanLine x VerticalResolution x PixelElementSize.
 } EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE;
 
-struct EFI_GUID EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID = {0x9042a9de, 0x23dc, 0x4a38, {0x96, 0xfb, 0x7a, 0xde, 0xd0, 0x80, 0x51, 0x6a}};
+typedef struct EFI_GUID
+{
+    UINT32    Data1;
+    UINT16    Data2;
+    UINT16    Data3;
+    UINT8     Data4[8];
+} EFI_GUID;
+
+typedef UINTN EFI_TPL;
+
+typedef enum {
+    AllocateAnyPages, //Allocation requests of Type AllocateAnyPages allocate any available range of pages that satisfies the request.
+    AllocateMaxAddress, //Allocation requests of Type AllocateMaxAddress allocate any available range of pages whose uppermost address is less than or equal to the address pointed to by Memory on input. 
+    AllocateAddress, //Allocation requests of Type AllocateAddress allocate pages at the address pointed to by Memory on input.
+    MaxAllocateType
+} EFI_ALLOCATE_TYPE;
+
+typedef UINT64  EFI_VIRTUAL_ADDRESS;
+
+typedef struct { 
+    UINT32        Type; //Type of the memory region.  
+    EFI_PHYSICAL_ADDRESS   PhysicalStart; //Physical address of the first byte in the memory region.
+    EFI_VIRTUAL_ADDRESS    VirtualStart; //Virtual address of the first byte in the memory region. 
+    UINT64                 NumberOfPages; //Number of 4 KiB pages in the memory region.  
+    UINT64                 Attribute; //Attributes of the memory region that describe the bit mask of capabilities for that memory region
+} EFI_MEMORY_DESCRIPTOR;
+
+typedef void(*EFI_EVENT_NOTIFY) (   
+    EFI_EVENT Event,
+    void    *Context
+);
+
+typedef enum { 
+    AllHandles, //Protocol and SearchKey are ignored and the function returns an array of every handle in the system.
+    ByRegisterNotify, //SearchKey supplies the Registration value returned by EFI_BOOT_SERVICES.
+    ByProtocol //All handles that support Protocol are returned. SearchKey is ignored for this search type. 
+} EFI_LOCATE_SEARCH_TYPE;
+
+typedef enum EFI_TIMER_DELAY
+{
+    TimerCancel, //The event’s timer setting is to be cancelled and no timer trigger is to be set. 
+    TimerPeriodic, //The event is to be signaled periodically at TriggerTime intervals from the current time. 
+    TimerRelative //The event is to be signaled in TriggerTime 100ns units.
+} EFI_TIMER_DELAY;
+
+typedef enum EFI_INTERFACE_TYPE
+{
+    EFI_NATIVE_INTERFACE
+} EFI_INTERFACE_TYPE;
+
+typedef struct EFI_DEVICE_PATH_PROTOCOL
+{
+    UINT8   Type; //Type 1 – Hardware Device Path
+    UINT8   SubType; //Sub-Type 1 – PCI
+    UINT8   Length[2]; //Length of this structure is 6 bytes
+} EFI_DEVICE_PATH_PROTOCOL;
+
+typedef struct EFI_OPEN_PROTOCOL_INFORMATION_ENTRY
+{
+    EFI_HANDLE                  AgentHandle;
+    EFI_HANDLE                  ControllerHandle;
+    UINT32                      Attributes;
+    UINT32                      OpenCount;
+} EFI_OPEN_PROTOCOL_INFORMATION_ENTRY;
 
 //  ____              _   ____                  _               
 // | __ )  ___   ___ | |_/ ___|  ___ _ ____   _(_) ___ ___  ___ 
@@ -475,7 +550,7 @@ typedef struct {
     EFI_REINSTALL_PROTOCOL_INTERFACE ReinstallProtocolInterface; // EFI 1.0+
     EFI_UNINSTALL_PROTOCOL_INTERFACE UninstallProtocolInterface; // EFI 1.0+ 
     EFI_HANDLE_PROTOCOL              HandleProtocol;   // EFI 1.0+
-    VOID*              Reserved; // EFI 1.0+
+    void*              Reserved; // EFI 1.0+
     EFI_REGISTER_PROTOCOL_NOTIFY     RegisterProtocolNotify;    // EFI 1.0+
     EFI_LOCATE_HANDLE                LocateHandle;     // EFI 1.0+
     EFI_LOCATE_DEVICE_PATH           LocateDevicePath; // EFI 1.0+
@@ -524,3 +599,5 @@ typedef struct {
     EFI_SET_MEM                      SetMem;                   // EFI 1.1+
     EFI_CREATE_EVENT_EX              CreateEventEx;            // UEFI 2.0+
 } EFI_BOOT_SERVICES;
+
+//END OF BOOTSERVICES
