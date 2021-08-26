@@ -128,6 +128,21 @@ typedef struct EFI_GRAPHICS_OUTPUT_PROTCOL { //GOP
 
 EFI_GRAPHICS_OUTPUT_PROTOCOL* gop;
 
+typedef struct { 
+    UINT32   RedMask;
+    UINT32   GreenMask;
+    UINT32   BlueMask;
+    UINT32   ReservedMask;
+} EFI_PIXEL_BITMASK; //bitmask is data that is used for bitwise operations, particularly in a bit field
+
+typedef enum { 
+    PixelRedGreenBlueReserved8BitPerColor, //A pixel is 32-bits and byte zero represents red, byte one represents green, byte two represents blue, and byte three is reserved. 
+    PixelBlueGreenRedReserved8BitPerColor, //A pixel is 32-bits and byte zero represents blue, byte one represents green, byte two represents red, and byte three is reserved. 
+    PixelBitMask, //The pixel definition of the physical frame buffer is defined by EFI_PIXEL_BITMASK
+    PixelBltOnly, //This mode does not support a physical frame buffer
+    PixelFormatMax //Valid EFI_GRAPHICS_PIXEL_FORMAT enum values are less than this value.
+} EFI_GRAPHICS_PIXEL_FORMAT;
+
 //Defining MODE INFORMATION
 typedef struct{
     UINT32 Version; //The version of this data structure 
@@ -145,8 +160,6 @@ typedef EFI_STATUS (*EFI_GRAPHICS_OUTPUT_PROTOCOL_QUERY_MODE) (
  UINTN *SizeOfInfo //A pointer to the size, in bytes, of the Info buffer. 
  EFI_GRAPHICS_OUTPUT_MODE_INFORMATION **Info //A pointer to a callee allocated buffer that returns information about ModeNumber.
  );
-
-//bitmask is data that is used for bitwise operations, particularly in a bit field
 
 //Defining SET MODE
  typedef EFI_STATUS(*EFI_GRAPHICS_OUTPUT_PROTOCOL_SET_MODE) (
@@ -171,7 +184,7 @@ typedef struct{
 
 typedef EFI_STATUS(*EFI_GRAPHICS_OUTPUT_PROTOCOL_BLT) (
     EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
-    EFI_GRAPHICS_OUTPUT_BLT_PIXEL *BltBuffer, OPTIONAL //The data to transfer to the graphics screen. 
+    EFI_GRAPHICS_OUTPUT_BLT_PIXEL *BltBuffer, //The data to transfer to the graphics screen. 
     EFI_GRAPHICS_OUTPUT_BLT_OPERATION BltOperation, //The operation to perform when copying BltBuffer on to the graphics screen.
     UINTN SourceX, //The X coordinate of the source for the BltOperation. The origin of the screen is 0, 0 and that is the upper left-hand corner of the screen.
     UINTN SourceY, //The Y coordinate of the source for the BltOperation. The origin of the screen is 0, 0 and that is the upper left-hand corner of the screen.
@@ -179,7 +192,7 @@ typedef EFI_STATUS(*EFI_GRAPHICS_OUTPUT_PROTOCOL_BLT) (
     UINTN DestinationY, //The Y coordinate of the destination for the BltOperation
     UINTN Width, //The width of a rectangle in the blt rectangle in pixels. Each pixel is represented by an EFI_GRAPHICS_OUTPUT_BLT_PIXEL element.
     UINTN Height, //The height of a rectangle in the blt rectangle in pixels. Each pixel is represented by an EFI_GRAPHICS_OUTPUT_BLT_PIXEL element.
-    UINTN Delta OPTIONAL //Not used for EfiBltVideoFill or the EfiBltVideoToVideo operation. If a Delta of zero is used, the entire BltBuffer is being operated on.
+    UINTN Delta //Not used for EfiBltVideoFill or the EfiBltVideoToVideo operation. If a Delta of zero is used, the entire BltBuffer is being operated on.
 );
 
 typedef struct {  
