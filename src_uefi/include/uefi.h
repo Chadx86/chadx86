@@ -124,7 +124,7 @@ typedef struct EFI_GRAPHICS_OUTPUT_PROTCOL { //GOP
     EFI_GRAPHICS_OUTPUT_PROTOCOL_SET_MODE SetMode; //Set the video device into the specified mode and clears the visible portions of the output display to black.
     EFI_GRAPHICS_OUTPUT_PROTOCOL_BLT Blt; //Software abstraction to draw on the video device’s frame buffer
     EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE *Mode; //Pointer to EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE data.
-} EFI_GRAPHICS_OUTPUT_PROTOCOL
+} EFI_GRAPHICS_OUTPUT_PROTOCOL;
 
 EFI_GRAPHICS_OUTPUT_PROTOCOL* gop;
 
