@@ -268,12 +268,13 @@ typedef struct EFI_OPEN_PROTOCOL_INFORMATION_ENTRY
     UINT32                      Attributes;
     UINT32                      OpenCount;
 } EFI_OPEN_PROTOCOL_INFORMATION_ENTRY;
-
-//  ____              _   ____                  _               
-// | __ )  ___   ___ | |_/ ___|  ___ _ ____   _(_) ___ ___  ___ 
-// |  _ \ / _ \ / _ \| __\___ \ / _ \ '__\ \ / / |/ __/ _ \/ __|
-// | |_) | (_) | (_) | |_ ___) |  __/ |   \ V /| | (_|  __/\__ \
-// |____/ \___/ \___/ \__|____/ \___|_|    \_/ |_|\___\___||___/
+/* 
+ ____              _   ____                  _               
+| __ )  ___   ___ | |_/ ___|  ___ _ ____   _(_) ___ ___  ___ 
+|  _ \ / _ \ / _ \| __\___ \ / _ \ '__\ \ / / |/ __/ _ \/ __|
+| |_) | (_) | (_) | |_ ___) |  __/ |   \ V /| | (_|  __/\__ \ 
+|____/ \___/ \___/ \__|____/ \___|_|    \_/ |_|\___\___||___/ 
+*/
 
 //Defining things inside BootServices, the first typedef defined is on page 157
 typedef EFI_STATUS (*EFI_RAISE_TPL)( // The new task priority level. It must be greater than or equal to the current task priority level. See “Related Definitions.”
@@ -498,11 +499,11 @@ typedef EFI_STATUS (*EFI_LOCATE_PROTOCOL)(
 );
 
 typedef EFI_STATUS (*EFI_INSTALL_MULTIPLE_PROTOCOL_INTERFACES)(
-    EFI_HANDLE *Handle, ...
+    EFI_HANDLE *Handle
 );
 
 typedef EFI_STATUS (*EFI_UNINSTALL_MULTIPLE_PROTOCOL_INTERFACES)(
-    EFI_HANDLE *Handle, ...
+    EFI_HANDLE *Handle
 );
 
 typedef EFI_STATUS (*EFI_CALCULATE_CRC32)(
