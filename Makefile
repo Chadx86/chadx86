@@ -24,6 +24,7 @@ setupDirs:
 	&& dirs=$$(find -type d) \
 	&& cd ../$(BUILDDIR) \
 	&& mkdir -p $$dirs
+
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c
 	@echo "[$(CC)][$<]"
 	@$(CC) $(CFLAGS) -c $< -o $@
