@@ -599,6 +599,32 @@ typedef struct {
 
 //END OF BOOTSERVICES
 
+/*
+  __  __                                   __  __                 
+ |  \/  | ___ _ __ ___   ___  _ __ _   _  |  \/  | __ _ _ __  ___ 
+ | |\/| |/ _ \ '_ ` _ \ / _ \| '__| | | | | |\/| |/ _` | '_ \/ __|
+ | |  | |  __/ | | | | | (_) | |  | |_| | | |  | | (_| | |_) \__ \
+ |_|  |_|\___|_| |_| |_|\___/|_|   \__, | |_|  |_|\__,_| .__/|___/
+                                   |___/               |_|        
+*/
+
+typedef struct {
+	EFI_MEMORY_DESCRIPTOR* mMap; //mMap short for memory map
+	UINTN mMapSize; //memory map size
+	UINTN mMapDescSize; //memory map descriptor size
+} BootInfo;
+
+EFI_MEMORY_DESCRIPTOR* Map = 0; //a pointer to the memory despriptor struct which has number of pages, physical address, and type of the memory section
+UINTN MapSize, MapKey; //MapSize is just the complete size of the map in bytes and the mapkey is something we need in uefi
+UINTN DescriptorSize; //How big each descriptor entry is
+UINT32 DescriptorVersion; //the version of the descriptor struct
+{
+	
+	SystemTable->BootServices->GetMemoryMap(&MapSize, Map, &MapKey, &DescriptorSize, &DescriptorVersion); //gives us the mapsize and mapkey
+	SystemTable->BootServices->AllocatePool(EfiLoaderData, MapSize, (void**)&Map);
+	SystemTable->BootServices->GetMemoryMap(&MapSize, Map, &MapKey, &DescriptorSize, &DescriptorVersion);
+}
+
 typedef struct EFI_SYSTEM_TABLE
 {
      EFI_TABLE_HEADER                  Hdr; //The table header for the EFI System Table
