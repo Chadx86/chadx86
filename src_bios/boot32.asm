@@ -1,7 +1,11 @@
-[BITS 16]
-jmp short start
+org 0x7C00
+bits 16
+
+
+jmp start
 nop
-OEM_ID                db 		"QUASI-OS"
+
+OEM_ID                db 		"CHADX-86"
 BytesPerSector        dw 		0x0200
 SectorsPerCluster     db 		0x08
 ReservedSectors       dw 		0x0020
@@ -21,8 +25,18 @@ RootDirectoryStart    dd 		0x00000002
 FSInfoSector          dw 		0x0001
 BackupBootSector      dw 		0x0006
 
-start:
-jmp $
+TIMES 12 DB 0 ;jumping to next offset
 
-TIMES 510-($-$$) DB 0
-DW 0xAA55
+DriveNumber           db 		0x00
+ReservedByte          db   	0x00
+Signature             db 		0x29
+VolumeID              dd 		0xFFFFFFFF
+VolumeLabel           db 		"CHADX  BOOT"
+SystemID              db 		"FAT32   "
+
+start:
+	jmp $
+
+
+times 510-($-$$) db 0
+db 0x55, 0xAA		;; BIOS bootcode
