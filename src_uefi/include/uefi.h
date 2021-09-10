@@ -251,6 +251,30 @@ typedef struct EFI_OPEN_PROTOCOL_INFORMATION_ENTRY
     UINT32                      Attributes;
     UINT32                      OpenCount;
 } EFI_OPEN_PROTOCOL_INFORMATION_ENTRY;
+
+//*******************************************************
+//EFI_MEMORY_TYPE
+//*******************************************************
+// These type values are discussed in Table 29 and Table 30.
+typedef enum {
+    EfiReservedMemoryType,  
+    EfiLoaderCode,  
+    EfiLoaderData,  
+    EfiBootServicesCode,  
+    EfiBootServicesData,  
+    EfiRuntimeServicesCode,  
+    EfiRuntimeServicesData,  
+    EfiConventionalMemory,  
+    EfiUnusableMemory,  
+    EfiACPIReclaimMemory,  
+    EfiACPIMemoryNVS,  
+    EfiMemoryMappedIO,  
+    EfiMemoryMappedIOPortSpace,  
+    EfiPalCode,  
+    EfiPersistentMemory,  
+    EfiMaxMemoryType
+} EFI_MEMORY_TYPE;
+
 /* 
  ____              _   ____                  _               
 | __ )  ___   ___ | |_/ ___|  ___ _ ____   _(_) ___ ___  ___ 
@@ -614,16 +638,7 @@ typedef struct {
 	UINTN mMapDescSize; //memory map descriptor size
 } BootInfo;
 
-EFI_MEMORY_DESCRIPTOR* Map = 0; //a pointer to the memory despriptor struct which has number of pages, physical address, and type of the memory section
-UINTN MapSize, MapKey; //MapSize is just the complete size of the map in bytes and the mapkey is something we need in uefi
-UINTN DescriptorSize; //How big each descriptor entry is
-UINT32 DescriptorVersion; //the version of the descriptor struct
-{
-	
-	SystemTable->BootServices->GetMemoryMap(&MapSize, Map, &MapKey, &DescriptorSize, &DescriptorVersion); //gives us the mapsize and mapkey
-	SystemTable->BootServices->AllocatePool(EfiLoaderData, MapSize, (void**)&Map);
-	SystemTable->BootServices->GetMemoryMap(&MapSize, Map, &MapKey, &DescriptorSize, &DescriptorVersion);
-}
+BootInfo* bootInfo;
 
 typedef struct EFI_SYSTEM_TABLE
 {
@@ -642,3 +657,12 @@ typedef struct EFI_SYSTEM_TABLE
      EFI_CONFIGURATION_TABLE           *ConfigurationTable; // A pointer to the system configuration tables. The number of entries in the table is NumberOfTableEntries.
     
 } EFI_SYSTEM_TABLE;
+
+EFI_SYSTEM_TABLE *SystemTable; //pointer to EFI_SYSTEM_TABLE
+
+EFI_HANDLE ImageHandle; //pointer to EFI_HANDLE
+
+void Print(CHAR16* str)
+{
+    SystemTable->ConOut->OutputString(SystemTable->ConOut, str);
+}
