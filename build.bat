@@ -1,4 +1,1 @@
-
-fasm src_asm\main.asm build\bootx64.efi
-pause
-
+nasm -f bin src_bios/boot32.asm -o bin\boot32.bin
