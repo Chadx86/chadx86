@@ -5,7 +5,7 @@ bits 16
 jmp start
 nop
 
-OEM_ID                db 		"CHADX-86"
+OEM_ID                db 		"MSDOS5.0"
 BytesPerSector        dw 		0x0200
 SectorsPerCluster     db 		0x08
 ReservedSectors       dw 		0x0020
@@ -35,7 +35,36 @@ VolumeLabel           db 		"CHADX  BOOT"
 SystemID              db 		"FAT32   "
 
 start:
-	jmp $
+	mov ah, 0x0e ;change to tty mode
+	mov al, 'C' ;int 0x10 looks in al for character to print
+	int 0x10 ;call int 0x10 to load character to screen
+	mov al, 'H'
+	int 0x10
+	mov al, 'A'
+	int 0x10
+	mov al, 'D'
+	int 0x10
+	mov al, 'X'
+	int 0x10
+	mov al, '8'
+	int 0x10
+	mov al, '6'
+	int 0x10
+	mov al, '-'
+	int 0x10
+	mov al, 'L'
+	int 0x10
+	mov al, 'E'
+	int 0x10
+	mov al, 'G'
+	int 0x10
+	mov al, 'A'
+	int 0x10
+	mov al, 'C'
+	int 0x10
+	mov al, 'Y'
+	int 0x/10
+	jmp $ ;infinite loop
 
 
 times 510-($-$$) db 0
