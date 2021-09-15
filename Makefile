@@ -1,7 +1,8 @@
 CC = x86_64-w64-mingw32-gcc
-AS = fasm
+AS = nasm
 BUILDDIR=bin
 SRCDIR=src_uefi
+BIOSDIR
 CFLAGS=-Wall  -Werror -fno-builtin -m64 -mabi=ms -nostdlib -ffreestanding -I$(SRCDIR)/include
 LFLAGS=-Wall -Werror -m64 -fno-builtin -ffreestanding -mabi=ms -nostdlib -shared -Wl,-dll -Wl,--subsystem,10 -e main_uefi
 CFILES  = $(shell find $(SRCDIR) -name '*.c')
@@ -11,6 +12,9 @@ OBJ  += $(patsubst $(SRCDIR)/%.s,$(BUILDDIR)/%.s.o,$(ASMFILES))
 
 
 all: build disk
+
+bios: 
+nasm -f bin src_bios/boot32.asm -o bin/boot.bin
 
 build: BOOTX64.EFI
 
