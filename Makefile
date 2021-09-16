@@ -2,7 +2,7 @@ CC = x86_64-w64-mingw32-gcc
 AS = nasm
 BUILDDIR=bin
 SRCDIR=src_uefi
-BIOSDIR
+BIOS_SRCDIR=src_bios
 CFLAGS=-Wall  -Werror -fno-builtin -m64 -mabi=ms -nostdlib -ffreestanding -I$(SRCDIR)/include
 LFLAGS=-Wall -Werror -m64 -fno-builtin -ffreestanding -mabi=ms -nostdlib -shared -Wl,-dll -Wl,--subsystem,10 -e main_uefi
 CFILES  = $(shell find $(SRCDIR) -name '*.c')
@@ -13,10 +13,10 @@ OBJ  += $(patsubst $(SRCDIR)/%.s,$(BUILDDIR)/%.s.o,$(ASMFILES))
 
 all: build disk
 
-bios: 
-nasm -f bin src_bios/boot32.asm -o bin/boot.bin
+build: BOOTX64.EFI BIOS
 
-build: BOOTX64.EFI
+BIOS: 
+	nasm -f bin (BIOS_SRCDIR)/boot32.asm -o bin/boot.bin
 
 BOOTX64.EFI: setupDirs $(OBJ)
 	@echo [$(CC)][LINKING ALL]
