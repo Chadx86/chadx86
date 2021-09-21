@@ -1,4 +1,4 @@
-#include <uefi.h>
+#include <efi.h>
 
 EFI_STATUS main_uefi()
 {
@@ -6,8 +6,7 @@ EFI_STATUS main_uefi()
 
   SystemTable->ConOut->OutputString(SystemTable->ConOut, L"Welcome to Chadx86 bootloader\r\n");
 
-   //GOP
-
+  //GOP
   EFI_STATUS Status;
 
   Status = SystemTable->BootServices->LocateProtocol(&EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID, 0, (void**)&gop);
