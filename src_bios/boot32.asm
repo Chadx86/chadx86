@@ -36,20 +36,24 @@ SystemID              db 		"FAT32   "
 
 start:
 	mov si, bootmsg
-        call print_string
+    call print_string
 
 	jmp $ ;infinite loop
 
-print_string:
-        mov ah, 0x0e
-        mov al, [si]
-        int 0x10
-        inc si
-        cmp [si], 0
-        jne print_string
-        ret
+print_string:                    ;get the character, move it to al, call bios, continue until string is empty
+      mov ah, 0Eh         ;Set text mode for bios
 
-msg: db "Chadx86-LEGACY", 0
+    .run:
+      lodsb
+      cmp al, 0
+      je .done
+      int 10h
+      jmp .run
+
+    .done:
+      ret
+
+bootmsg: db "Chadx86-LEGACY", 0
 
 times 510-($-$$) db 0
-db 0x55, 0xAA		;; BIOS bootcode
+db 0x55, 0xAA		; BIOS bootcode
