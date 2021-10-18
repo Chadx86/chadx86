@@ -12,7 +12,7 @@ The chadx86 logo, main_uefi.c, uefi.h created by PedroElFrijol
  - Boot a kernel with the bootloader
 
 ## Requirements to build chadx86
- - Assembler called "fasm"
+ - Nasm (legacy only)
  - Mingw-w64 C compiler
  - QEMU Virtual Machine
  - GNU Make
