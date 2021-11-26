@@ -35,37 +35,25 @@ VolumeLabel           db 		"CHADX  BOOT"
 SystemID              db 		"FAT32   "
 
 start:
-	mov ah, 0x0e ;change to tty mode
-	mov al, 'C' ;int 0x10 looks in al for character to print
-	int 0x10 ;call int 0x10 to load character to screen
-	mov al, 'H'
-	int 0x10
-	mov al, 'A'
-	int 0x10
-	mov al, 'D'
-	int 0x10
-	mov al, 'X'
-	int 0x10
-	mov al, '8'
-	int 0x10
-	mov al, '6'
-	int 0x10
-	mov al, '-'
-	int 0x10
-	mov al, 'L'
-	int 0x10
-	mov al, 'E'
-	int 0x10
-	mov al, 'G'
-	int 0x10
-	mov al, 'A'
-	int 0x10
-	mov al, 'C'
-	int 0x10
-	mov al, 'Y'
-	int 0x/10
+	mov si, bootmsg
+    call print_string
+
 	jmp $ ;infinite loop
 
+print_string:                    ;get the character, move it to al, call bios, continue until string is empty
+      mov ah, 0Eh         ;Set text mode for bios
+
+    .run:
+      lodsb
+      cmp al, 0
+      je .done
+      int 10h
+      jmp .run
+
+    .done:
+      ret
+
+bootmsg: db "Chadx86-LEGACY", 0
 
 times 510-($-$$) db 0
-db 0x55, 0xAA		;; BIOS bootcode
+db 0x55, 0xAA		; BIOS bootcode
