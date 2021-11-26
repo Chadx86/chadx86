@@ -109,92 +109,6 @@ typedef struct {
     void               *VendorTable; //A pointer to the table associated with VendorGuid
 } EFI_CONFIGURATION_TABLE;
 
-//12.9 Graphics Output Protocol in UEFI specs 2.8B
-typedef struct EFI_GRAPHICS_OUTPUT_PROTCOL { //GOP
-    EFI_GRAPHICS_OUTPUT_PROTOCOL_QUERY_MODE QueryMode; //Returns information for an available graphics mode that the graphics device and the set of active video output devices supports.
-    EFI_GRAPHICS_OUTPUT_PROTOCOL_SET_MODE SetMode; //Set the video device into the specified mode and clears the visible portions of the output display to black.
-    EFI_GRAPHICS_OUTPUT_PROTOCOL_BLT Blt; //Software abstraction to draw on the video device’s frame buffer
-    EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE *Mode; //Pointer to EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE data.
-} EFI_GRAPHICS_OUTPUT_PROTOCOL;
-
-EFI_GRAPHICS_OUTPUT_PROTOCOL* gop;
-
-typedef struct { 
-    UINT32   RedMask;
-    UINT32   GreenMask;
-    UINT32   BlueMask;
-    UINT32   ReservedMask;
-} EFI_PIXEL_BITMASK; //bitmask is data that is used for bitwise operations, particularly in a bit field
-
-typedef enum { 
-    PixelRedGreenBlueReserved8BitPerColor, //A pixel is 32-bits and byte zero represents red, byte one represents green, byte two represents blue, and byte three is reserved. 
-    PixelBlueGreenRedReserved8BitPerColor, //A pixel is 32-bits and byte zero represents blue, byte one represents green, byte two represents red, and byte three is reserved. 
-    PixelBitMask, //The pixel definition of the physical frame buffer is defined by EFI_PIXEL_BITMASK
-    PixelBltOnly, //This mode does not support a physical frame buffer
-    PixelFormatMax //Valid EFI_GRAPHICS_PIXEL_FORMAT enum values are less than this value.
-} EFI_GRAPHICS_PIXEL_FORMAT;
-
-//Defining MODE INFORMATION
-typedef struct{
-    UINT32 Version; //The version of this data structure 
-    UINT32 HorizontalResolution; //The size of video screen in pixels in the X dimension.
-    UINT32 VerticalResolution; //The size of video screen in pixels in the Y dimension.
-    EFI_GRAPHICS_PIXEL_FORMAT PixelFormat; //Enumeration that defines the physical format of the pixel
-    EFI_PIXEL_BITMASK PixelInformation; //This bit-mask is only valid if PixelFormat is set to PixelPixelBitMask
-    UINT32 PixelsPerScanLine; //Defines the number of pixel elements per video memory line
-} EFI_GRAPHICS_OUTPUT_MODE_INFORMATION;
-
-//Defining QUERY MODE
-typedef EFI_STATUS (*EFI_GRAPHICS_OUTPUT_PROTOCOL_QUERY_MODE) (
- EFI_GRAPHICS_OUTPUT_PROTOCOL *This, //The EFI_GRAPHICS_OUTPUT_PROTOCOL instance. Type EFI_GRAPHICS_OUTPUT_PROTOCOL is defined in this section.
- UINT32 ModeNumber, //The mode number to return information on.
- UINTN *SizeOfInfo, //A pointer to the size, in bytes, of the Info buffer. 
- EFI_GRAPHICS_OUTPUT_MODE_INFORMATION **Info //A pointer to a callee allocated buffer that returns information about ModeNumber.
- );
-
-//Defining SET MODE
- typedef EFI_STATUS(*EFI_GRAPHICS_OUTPUT_PROTOCOL_SET_MODE) (
-    EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
-    UINT32 ModeNumber //Abstraction that defines the current video mode
- );
-
-typedef struct{ 
-    UINT8  Blue;
-    UINT8  Green;
-    UINT8  Red;
-    UINT8  Reserved;
-} EFI_GRAPHICS_OUTPUT_BLT_PIXEL;
-
- typedef enum { //Enumeration (enum) is a user defined datatype in C language
-    EfiBltVideoFill, 
-    EfiBltVideoToBltBuffer, 
-    EfiBltBufferToVideo,  
-    EfiBltVideoToVideo, 
-    EfiGraphicsOutputBltOperationMax
-} EFI_GRAPHICS_OUTPUT_BLT_OPERATION;
-
-typedef EFI_STATUS(*EFI_GRAPHICS_OUTPUT_PROTOCOL_BLT) (
-    EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
-    EFI_GRAPHICS_OUTPUT_BLT_PIXEL *BltBuffer, //The data to transfer to the graphics screen. 
-    EFI_GRAPHICS_OUTPUT_BLT_OPERATION BltOperation, //The operation to perform when copying BltBuffer on to the graphics screen.
-    UINTN SourceX, //The X coordinate of the source for the BltOperation. The origin of the screen is 0, 0 and that is the upper left-hand corner of the screen.
-    UINTN SourceY, //The Y coordinate of the source for the BltOperation. The origin of the screen is 0, 0 and that is the upper left-hand corner of the screen.
-    UINTN DestinationX, //The X coordinate of the destination for the BltOperation
-    UINTN DestinationY, //The Y coordinate of the destination for the BltOperation
-    UINTN Width, //The width of a rectangle in the blt rectangle in pixels. Each pixel is represented by an EFI_GRAPHICS_OUTPUT_BLT_PIXEL element.
-    UINTN Height, //The height of a rectangle in the blt rectangle in pixels. Each pixel is represented by an EFI_GRAPHICS_OUTPUT_BLT_PIXEL element.
-    UINTN Delta //Not used for EfiBltVideoFill or the EfiBltVideoToVideo operation. If a Delta of zero is used, the entire BltBuffer is being operated on.
-);
-
-typedef struct {  
-    UINT32 MaxMode; //The number of modes supported by QueryMode() and SetMode()
-    UINT32 Mode; //Current Mode of the graphics device. Valid mode numbers are 0 to MaxMode -1.
-    EFI_GRAPHICS_OUTPUT_MODE_INFORMATION  *Info; //Pointer to read-only EFI_GRAPHICS_OUTPUT_MODE_INFORMATION data.
-    UINTN SizeOfInfo; //Size of Info structure in bytes. Future versions of this specification may increase the size of the EFI_GRAPHICS_OUTPUT_MODE_INFORMATION data.
-    EFI_PHYSICAL_ADDRESS FrameBufferBase; //Base address of graphics linear frame buffer
-    UINTN FrameBufferSize; //Amount of frame buffer needed to support the active mode as defined by PixelsPerScanLine x VerticalResolution x PixelElementSize.
-} EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE;
-
 typedef UINTN EFI_TPL;
 
 typedef enum {
@@ -661,6 +575,100 @@ typedef struct EFI_SYSTEM_TABLE
 EFI_SYSTEM_TABLE *SystemTable; //pointer to EFI_SYSTEM_TABLE
 
 EFI_HANDLE ImageHandle; //pointer to EFI_HANDLE
+
+/*   _____  ____  _____  
+  / ____|/ __ \|  __ \ 
+ | |  __| |  | | |__) |
+ | | |_ | |  | |  ___/ 
+ | |__| | |__| | |     
+  \_____|\____/|_|     
+*/
+
+ typedef enum { //Enumeration (enum) is a user defined datatype in C language
+    EfiBltVideoFill, 
+    EfiBltVideoToBltBuffer, 
+    EfiBltBufferToVideo,  
+    EfiBltVideoToVideo, 
+    EfiGraphicsOutputBltOperationMax
+} EFI_GRAPHICS_OUTPUT_BLT_OPERATION;
+
+typedef struct{ 
+    UINT8  Blue;
+    UINT8  Green;
+    UINT8  Red;
+    UINT8  Reserved;
+} EFI_GRAPHICS_OUTPUT_BLT_PIXEL;
+
+typedef enum { 
+    PixelRedGreenBlueReserved8BitPerColor, //A pixel is 32-bits and byte zero represents red, byte one represents green, byte two represents blue, and byte three is reserved. 
+    PixelBlueGreenRedReserved8BitPerColor, //A pixel is 32-bits and byte zero represents blue, byte one represents green, byte two represents red, and byte three is reserved. 
+    PixelBitMask, //The pixel definition of the physical frame buffer is defined by EFI_PIXEL_BITMASK
+    PixelBltOnly, //This mode does not support a physical frame buffer
+    PixelFormatMax //Valid EFI_GRAPHICS_PIXEL_FORMAT enum values are less than this value.
+} EFI_GRAPHICS_PIXEL_FORMAT;
+
+typedef struct { 
+    UINT32   RedMask;
+    UINT32   GreenMask;
+    UINT32   BlueMask;
+    UINT32   ReservedMask;
+} EFI_PIXEL_BITMASK; //bitmask is data that is used for bitwise operations, particularly in a bit field
+
+//Defining MODE INFORMATION
+typedef struct{
+    UINT32 Version; //The version of this data structure 
+    UINT32 HorizontalResolution; //The size of video screen in pixels in the X dimension.
+    UINT32 VerticalResolution; //The size of video screen in pixels in the Y dimension.
+    EFI_GRAPHICS_PIXEL_FORMAT PixelFormat; //Enumeration that defines the physical format of the pixel
+    EFI_PIXEL_BITMASK PixelInformation; //This bit-mask is only valid if PixelFormat is set to PixelPixelBitMask
+    UINT32 PixelsPerScanLine; //Defines the number of pixel elements per video memory line
+} EFI_GRAPHICS_OUTPUT_MODE_INFORMATION;
+
+typedef struct {  
+    UINT32 MaxMode; //The number of modes supported by QueryMode() and SetMode()
+    UINT32 Mode; //Current Mode of the graphics device. Valid mode numbers are 0 to MaxMode -1.
+    EFI_GRAPHICS_OUTPUT_MODE_INFORMATION  *Info; //Pointer to read-only EFI_GRAPHICS_OUTPUT_MODE_INFORMATION data.
+    UINTN SizeOfInfo; //Size of Info structure in bytes. Future versions of this specification may increase the size of the EFI_GRAPHICS_OUTPUT_MODE_INFORMATION data.
+    EFI_PHYSICAL_ADDRESS FrameBufferBase; //Base address of graphics linear frame buffer
+    UINTN FrameBufferSize; //Amount of frame buffer needed to support the active mode as defined by PixelsPerScanLine x VerticalResolution x PixelElementSize.
+} EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE;
+
+//Defining QUERY MODE
+typedef EFI_STATUS (*EFI_GRAPHICS_OUTPUT_PROTOCOL_QUERY_MODE) (
+ EFI_GRAPHICS_OUTPUT_PROTOCOL *This, //The EFI_GRAPHICS_OUTPUT_PROTOCOL instance. Type EFI_GRAPHICS_OUTPUT_PROTOCOL is defined in this section.
+ UINT32 ModeNumber, //The mode number to return information on.
+ UINTN *SizeOfInfo, //A pointer to the size, in bytes, of the Info buffer. 
+ EFI_GRAPHICS_OUTPUT_MODE_INFORMATION **Info //A pointer to a callee allocated buffer that returns information about ModeNumber.
+ );
+
+ //Defining SET MODE
+ typedef EFI_STATUS(*EFI_GRAPHICS_OUTPUT_PROTOCOL_SET_MODE) (
+    EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
+    UINT32 ModeNumber //Abstraction that defines the current video mode
+ );
+
+  typedef EFI_STATUS(*EFI_GRAPHICS_OUTPUT_PROTOCOL_BLT) (
+    EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
+    EFI_GRAPHICS_OUTPUT_BLT_PIXEL *BltBuffer, //The data to transfer to the graphics screen. 
+    EFI_GRAPHICS_OUTPUT_BLT_OPERATION BltOperation, //The operation to perform when copying BltBuffer on to the graphics screen.
+    UINTN SourceX, //The X coordinate of the source for the BltOperation. The origin of the screen is 0, 0 and that is the upper left-hand corner of the screen.
+    UINTN SourceY, //The Y coordinate of the source for the BltOperation. The origin of the screen is 0, 0 and that is the upper left-hand corner of the screen.
+    UINTN DestinationX, //The X coordinate of the destination for the BltOperation
+    UINTN DestinationY, //The Y coordinate of the destination for the BltOperation
+    UINTN Width, //The width of a rectangle in the blt rectangle in pixels. Each pixel is represented by an EFI_GRAPHICS_OUTPUT_BLT_PIXEL element.
+    UINTN Height, //The height of a rectangle in the blt rectangle in pixels. Each pixel is represented by an EFI_GRAPHICS_OUTPUT_BLT_PIXEL element.
+    UINTN Delta //Not used for EfiBltVideoFill or the EfiBltVideoToVideo operation. If a Delta of zero is used, the entire BltBuffer is being operated on.
+);
+
+EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
+
+//12.9 Graphics Output Protocol in UEFI specs 2.8B
+typedef struct EFI_GRAPHICS_OUTPUT_PROTCOL { //GOP
+    EFI_GRAPHICS_OUTPUT_PROTOCOL_QUERY_MODE QueryMode; //Returns information for an available graphics mode that the graphics device and the set of active video output devices supports.
+    EFI_GRAPHICS_OUTPUT_PROTOCOL_SET_MODE SetMode; //Set the video device into the specified mode and clears the visible portions of the output display to black.
+    EFI_GRAPHICS_OUTPUT_PROTOCOL_BLT Blt; //Software abstraction to draw on the video device’s frame buffer
+    EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE *Mode; //Pointer to EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE data.
+} EFI_GRAPHICS_OUTPUT_PROTOCOL;
 
 void Print(CHAR16* str)
 {
