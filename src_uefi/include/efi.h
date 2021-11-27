@@ -635,7 +635,7 @@ typedef struct {
 
 //Defining QUERY MODE
 typedef EFI_STATUS (*EFI_GRAPHICS_OUTPUT_PROTOCOL_QUERY_MODE) (
- EFI_GRAPHICS_OUTPUT_PROTOCOL *This, //The EFI_GRAPHICS_OUTPUT_PROTOCOL instance. Type EFI_GRAPHICS_OUTPUT_PROTOCOL is defined in this section.
+ EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE *This, //The EFI_GRAPHICS_OUTPUT_PROTOCOL instance. Type EFI_GRAPHICS_OUTPUT_PROTOCOL is defined in this section.
  UINT32 ModeNumber, //The mode number to return information on.
  UINTN *SizeOfInfo, //A pointer to the size, in bytes, of the Info buffer. 
  EFI_GRAPHICS_OUTPUT_MODE_INFORMATION **Info //A pointer to a callee allocated buffer that returns information about ModeNumber.
@@ -643,12 +643,12 @@ typedef EFI_STATUS (*EFI_GRAPHICS_OUTPUT_PROTOCOL_QUERY_MODE) (
 
  //Defining SET MODE
  typedef EFI_STATUS(*EFI_GRAPHICS_OUTPUT_PROTOCOL_SET_MODE) (
-    EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
+    EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE *This,
     UINT32 ModeNumber //Abstraction that defines the current video mode
  );
 
   typedef EFI_STATUS(*EFI_GRAPHICS_OUTPUT_PROTOCOL_BLT) (
-    EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
+    EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE *This,
     EFI_GRAPHICS_OUTPUT_BLT_PIXEL *BltBuffer, //The data to transfer to the graphics screen. 
     EFI_GRAPHICS_OUTPUT_BLT_OPERATION BltOperation, //The operation to perform when copying BltBuffer on to the graphics screen.
     UINTN SourceX, //The X coordinate of the source for the BltOperation. The origin of the screen is 0, 0 and that is the upper left-hand corner of the screen.
@@ -660,7 +660,7 @@ typedef EFI_STATUS (*EFI_GRAPHICS_OUTPUT_PROTOCOL_QUERY_MODE) (
     UINTN Delta //Not used for EfiBltVideoFill or the EfiBltVideoToVideo operation. If a Delta of zero is used, the entire BltBuffer is being operated on.
 );
 
-EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
+EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE *gop;
 
 //12.9 Graphics Output Protocol in UEFI specs 2.8B
 typedef struct EFI_GRAPHICS_OUTPUT_PROTCOL { //GOP

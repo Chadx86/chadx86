@@ -1,3 +1,1 @@
-cd bin
-qemu-system-x86_64 boot32.bin
-cd ..
+qemu-system-x86_64 bin/boot.bin \\wsl$\Ubuntu-20.04\home\mj\chadx86\OVMFbin
