@@ -95,19 +95,97 @@ typedef UINT64              EFI_STATUS;
 
 typedef UINT64 EFI_PHYSICAL_ADDRESS;
 
-typedef struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL {} EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
-
 struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
 
-typedef EFI_STATUS (*EFI_TEXT_RESET)(struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, BOOLEAN ExtendedVerification);
-
-typedef EFI_STATUS (*EFI_TEXT_STRING)(struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, CHAR16 *String);
+typedef EFI_STATUS (*EFI_TEXT_RESET)(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, 
+    BOOLEAN ExtendedVerification
+);
 
 typedef struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
 {
-    EFI_TEXT_RESET      Reset;
-    EFI_TEXT_STRING     OutputString;
+    EFI_TEXT_RESET                         Reset;
+    EFI_TEXT_STRING                        OutputString;
+    EFI_TEXT_TEST_STRING                   TestString;
+    EFI_TEXT_QUERY_MODE                    QueryMode;
+    EFI_TEXT_SET_MODE                      SetMode;
+    EFI_TEXT_SET_ATTRIBUTE                 SetAttribute;
+    EFI_TEXT_CLEAR_SCREEN                  ClearScreen;
+    EFI_TEXT_SET_CURSOR_POSITION           SetCursorPosition;
+    EFI_TEXT_ENABLE_CURSOR                 EnableCursor;
+    SIMPLE_TEXT_OUTPUT_MODE                *Mode;
 } EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
+
+typedef EFI_STATUS (*EFI_INPUT_RESET)(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, 
+    BOOLEAN ExtendedVerification
+);
+
+typedef struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL
+{
+	EFI_INPUT_RESET        Reset;
+	EFI_INPUT_READ_KEY     ReadKeyStroke;
+	EFI_EVENT              WaitForKey;
+} EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
+
+// This function prints the string output to the screen.
+typedef EFI_STATUS (*EFI_TEXT_STRING)(
+    EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This, 
+    CHAR16 *String
+);
+
+typedef struct EFI_INPUT_KEY
+{
+	UINT16    ScanCode;
+	UINT16    UnicodeChar;
+}EFI_INPUT_KEY;
+
+typedef EFI_STATUS (*EFI_INPUT_READ_KEY)(struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This, EFI_INPUT_KEY *Key);
+
+typedef struct SIMPLE_TEXT_OUTPUT_MODE
+{
+    INT32                       MaxMode;
+    INT32                       Mode;
+    INT32                       Attribute;
+    INT32                       CursorColumn;
+    INT32                       CursorRow;
+    BOOLEAN                     CursorVisible;
+} SIMPLE_TEXT_OUTPUT_MODE;
+
+typedef EFI_STATUS (*EFI_TEXT_TEST_STRING)(
+    EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This, 
+    CHAR16 *String
+);
+
+typedef EFI_STATUS (*EFI_TEXT_QUERY_MODE)(
+    EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This, 
+    UINTN ModeNumber, 
+    UINTN *Columns, 
+    UINTN *Rows
+);
+
+typedef EFI_STATUS (*EFI_TEXT_SET_MODE)(
+    EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This, 
+    UINTN ModeNumber
+);
+
+typedef EFI_STATUS (*EFI_TEXT_SET_ATTRIBUTE)(
+    EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This, 
+    UINTN Attribute
+);
+
+typedef EFI_STATUS (*EFI_TEXT_CLEAR_SCREEN)(
+    EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This
+);
+
+typedef EFI_STATUS (*EFI_TEXT_SET_CURSOR_POSITION)(
+    EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This, 
+    UINTN Column, 
+    UINTN Row
+);
+
+typedef EFI_STATUS (*EFI_TEXT_ENABLE_CURSOR)(
+    EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This, 
+    BOOLEAN Visible
+);
 
 typedef struct {  
     EFI_TABLE_HEADER             Hdr;
@@ -751,8 +829,6 @@ typedef EFI_STATUS (*EFI_GRAPHICS_OUTPUT_PROTOCOL_QUERY_MODE) (
     UINTN Delta //Not used for EfiBltVideoFill or the EfiBltVideoToVideo operation. If a Delta of zero is used, the entire BltBuffer is being operated on.
 );
 
-EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE *gop;
-
 //12.9 Graphics Output Protocol in UEFI specs 2.8B
 typedef struct EFI_GRAPHICS_OUTPUT_PROTCOL { //GOP
     EFI_GRAPHICS_OUTPUT_PROTOCOL_QUERY_MODE QueryMode; //Returns information for an available graphics mode that the graphics device and the set of active video output devices supports.
@@ -760,93 +836,6 @@ typedef struct EFI_GRAPHICS_OUTPUT_PROTCOL { //GOP
     EFI_GRAPHICS_OUTPUT_PROTOCOL_BLT Blt; //Software abstraction to draw on the video device’s frame buffer
     EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE *Mode; //Pointer to EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE data.
 } EFI_GRAPHICS_OUTPUT_PROTOCOL;
-
-//Text stuff
-
-typedef struct EFI_INPUT_KEY
-{
-	UINT16    ScanCode;
-	UINT16    UnicodeChar;
-}EFI_INPUT_KEY;
-
-typedef EFI_STATUS (*EFI_INPUT_RESET)(struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This, BOOLEAN ExtendedVerification);
-
-typedef EFI_STATUS (*EFI_INPUT_READ_KEY)(struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This, EFI_INPUT_KEY *Key);
-
-typedef struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL
-{
-	EFI_INPUT_RESET        Reset;
-	EFI_INPUT_READ_KEY     ReadKeyStroke;
-	EFI_EVENT              WaitForKey;
-} EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
-
-typedef struct SIMPLE_TEXT_OUTPUT_MODE
-{
-    INT32                       MaxMode;
-    INT32                       Mode;
-    INT32                       Attribute;
-    INT32                       CursorColumn;
-    INT32                       CursorRow;
-    BOOLEAN                     CursorVisible;
-} SIMPLE_TEXT_OUTPUT_MODE;
-
-// This function prints the string output to the screen.
-typedef EFI_STATUS (*EFI_TEXT_STRING)(
-    EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, 
-    CHAR16 *String
-);
-
-typedef EFI_STATUS (*EFI_TEXT_TEST_STRING)(
-    EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, 
-    CHAR16 *String
-);
-
-typedef EFI_STATUS (*EFI_TEXT_QUERY_MODE)(
-    EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, 
-    UINTN ModeNumber, 
-    UINTN *Columns, 
-    UINTN *Rows
-);
-
-typedef EFI_STATUS (*EFI_TEXT_SET_MODE)(
-    EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, 
-    UINTN ModeNumber
-);
-
-typedef EFI_STATUS (*EFI_TEXT_SET_ATTRIBUTE)(
-    EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, 
-    UINTN Attribute
-);
-
-typedef EFI_STATUS (*EFI_TEXT_CLEAR_SCREEN)(
-    EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This
-);
-
-typedef EFI_STATUS (*EFI_TEXT_SET_CURSOR_POSITION)(
-    EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, 
-    UINTN Column, 
-    UINTN Row
-);
-
-typedef EFI_STATUS (*EFI_TEXT_ENABLE_CURSOR)(
-    EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, 
-    BOOLEAN Visible
-);
-
-typedef struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
-{
-    EFI_TEXT_RESET                         Reset;
-    EFI_TEXT_STRING                        OutputString;
-    EFI_TEXT_TEST_STRING                   TestString;
-    EFI_TEXT_QUERY_MODE                    QueryMode;
-    EFI_TEXT_SET_MODE                      SetMode;
-    EFI_TEXT_SET_ATTRIBUTE                 SetAttribute;
-    EFI_TEXT_CLEAR_SCREEN                  ClearScreen;
-    EFI_TEXT_SET_CURSOR_POSITION           SetCursorPosition;
-    EFI_TEXT_ENABLE_CURSOR                 EnableCursor;
-    SIMPLE_TEXT_OUTPUT_MODE                *Mode;
-} EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
-
 
 void Print(CHAR16* str)
 {

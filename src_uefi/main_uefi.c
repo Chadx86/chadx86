@@ -1,6 +1,5 @@
 #include <efi.h>
 #include <efilibs.h>
-#include <elf.h>
 
 //Page 509 in UEFI 2.8b
 
