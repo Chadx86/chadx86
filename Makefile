@@ -15,7 +15,7 @@ all: build disk
 build: BOOTX64.EFI BIOS
 
 BIOS: 
-	nasm -f bin (BIOS_SRCDIR)/boot32.asm -o bin/boot.bin
+	nasm -f bin $(BIOS_SRCDIR)/boot32.asm -o bin/boot.bin
 
 BOOTX64.EFI: setupDirs $(OBJ)
 	@echo [$(CC)][LINKING ALL]
@@ -47,7 +47,7 @@ disk: build
 clean:
 	@rm -rf $(BUILDDIR) *.EFI disk
 	-@mdeltree -i disk.img ::
-	
+
 uefi: disk
 	qemu-system-x86_64 -drive format=raw,unit=0,file=disk.img -bios bios64.bin -m 256M -vga std -machine q35
 
