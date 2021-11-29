@@ -47,15 +47,9 @@ disk: build
 clean:
 	@rm -rf $(BUILDDIR) *.EFI disk
 	-@mdeltree -i disk.img ::
-
-<<<<<<< HEAD
+	
 uefi: disk
 	qemu-system-x86_64 -drive format=raw,unit=0,file=disk.img -bios bios64.bin -m 256M -vga std -machine q35
 
 bios: build
 	qemu-system-x86_64 bin/boot.bin
-=======
-
-run: disk
-	qemu-system-x86_64 -drive format=raw,unit=0,file=disk.img -bios bios64.bin -m 256M -vga std -machine q35
->>>>>>> parent of a8bde34 (updated uefi and bios)

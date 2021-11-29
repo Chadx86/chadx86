@@ -48,14 +48,14 @@ EFI_STATUS main_uefi()
 
   }
   
-  EFI_FILE_PROTOCOL* Kernel = LoadFile(NULL, L"kernel.elf", ImageHandle, SystemTable); //runs the kernel
+  //EFI_FILE_PROTOCOL* Kernel = LoadFile(NULL, L"kernel.elf", ImageHandle, SystemTable); //runs the kernel
 
   while (1){};
   
   return EFI_SUCCESS; //Exits UEFI application (similar to return 0)
 }
 
-EFI_FILE_PROTOCOL* LoadFile(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){ //for running the kernel
+/*EFI_FILE_PROTOCOL* LoadFile(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){ //for running the kernel
     EFI_FILE_PROTOCOL* LoadedFile;
 
     // in gnu efi it is EFI_FILE instead of EFI_FILE_PROTOCOL
@@ -76,4 +76,4 @@ EFI_FILE_PROTOCOL* LoadFile(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HAND
     }
     return LoadedFile;
 
-}
+}*/
