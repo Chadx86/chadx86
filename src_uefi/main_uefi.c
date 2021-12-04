@@ -24,7 +24,7 @@ EFI_STATUS main_uefi()
 {
   SystemTable->ConOut->Reset(SystemTable->ConOut, 1);
 
-  SystemTable->ConOut->OutputString(SystemTable->ConOut, L"Welcome to Chadx86 bootloader\r\n");
+  Print(L"Welcome to Chadx86 bootloader\r\n"); //or SystemTable->ConOut->OutputString(SystemTable->ConOut, L"Welcome to Chadx86 bootloader\r\n");
 
   //GOP
   EFI_STATUS Status;
