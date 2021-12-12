@@ -20,47 +20,25 @@
 #define EFI_FILE_ARCHIVE       0x0000000000000020
 #define EFI_FILE_VALID_ATTR    0x0000000000000037
 
-EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *Volume;
+EFI_FILE_PROTOCOL* LoadFile(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){ //for running the kernel
+    EFI_FILE_PROTOCOL* LoadedFile;
 
-EFI_LOAD_FILE* LoadFile(EFI_LOAD_FILE* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){
-    
-}
+    // in gnu efi it is EFI_FILE instead of EFI_FILE_PROTOCOL
 
-void InitializeFILESYSTEM()
-{
-    // you need a file system to load a file, EFI uses FAT32
-    
-    Print(L"LoadedImage ... ");
-    EFI_LOADED_IMAGE_PROTOCOL *LoadedImage;
+    EFI_LOADED_IMAGE_PROTOCOL* LoadedImage;
     SystemTable->BootServices->HandleProtocol(ImageHandle, &EFI_LOADED_IMAGE_PROTOCOL_GUID, (void**)&LoadedImage);
-    
-    Print(L"DevicePath ... ");
-    EFI_DEVICE_PATH_PROTOCOL *DevicePath;
-    SystemTable->BootServices->HandleProtocol(LoadedImage->DeviceHandle, &EFI_DEVICE_PATH_PROTOCOL_GUID, (void**)&DevicePath);
 
-    Print(L"Volume ... ");
-    SystemTable->BootServices->HandleProtocol(LoadedImage->DeviceHandle, &EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID, (void**)&Volume);
-}
+    EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* FileSystem;
+    SystemTable->BootServices->HandleProtocol(LoadedImage->DeviceHandle, &EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID, (void**)&FileSystem);
 
-EFI_FILE_PROTOCOL* openFile(CHAR16* FileName)
-{
-    // This opens a file from the EFI FAT32 file system volume.
+    if (Directory == NULL){
+        FileSystem->OpenVolume(FileSystem, &Directory);
+    }
 
-    Print(L"RootFS ... ");
-    EFI_FILE_PROTOCOL* RootFS;
-    Volume->OpenVolume(Volume, &RootFS);
+    EFI_STATUS status = Directory->Open(Directory, &LoadedFile, Path, EFI_FILE_MODE_READ, EFI_FILE_READ_ONLY);
+    if (status != EFI_SUCCESS){
+        return NULL;
+    }
+    return LoadedFile;
 
-    Print(L"Opening File ... ");
-    EFI_FILE_PROTOCOL* FileHandle = NULL;
-    RootFS->Open(RootFS, &FileHandle, FileName, 0x0000000000000001, 0);
-    
-    return FileHandle;
-}
-
-void closeFile(EFI_FILE_PROTOCOL* FileHandle)
-{
-    // This closes the file.
-
-    Print(L"Closing File ... ");
-    FileHandle->Close(FileHandle);
 }
