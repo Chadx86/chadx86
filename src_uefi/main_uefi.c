@@ -1,25 +1,6 @@
 #include <efi.h>
 #include <efilibs.h>
 
-//Page 509 in UEFI 2.8b
-
-//*******************************************************
-// Open Modes
-//*******************************************************
-#define EFI_FILE_MODE_READ     0x0000000000000001
-#define EFI_FILE_MODE_WRITE    0x0000000000000002
-#define EFI_FILE_MODE_CREATE   0x8000000000000000
-//*******************************************************
-// File Attributes
-//*******************************************************
-#define EFI_FILE_READ_ONLY     0x0000000000000001
-#define EFI_FILE_HIDDEN        0x0000000000000002
-#define EFI_FILE_SYSTEM        0x0000000000000004
-#define EFI_FILE_RESERVED      0x0000000000000008
-#define EFI_FILE_DIRECTORY     0x0000000000000010
-#define EFI_FILE_ARCHIVE       0x0000000000000020
-#define EFI_FILE_VALID_ATTR    0x0000000000000037
-
 EFI_STATUS main_uefi()
 {
   SystemTable->ConOut->Reset(SystemTable->ConOut, 1);
@@ -48,14 +29,14 @@ EFI_STATUS main_uefi()
 
   }
   
-  //EFI_FILE_PROTOCOL* Kernel = LoadFile(NULL, L"kernel.elf", ImageHandle, SystemTable); //runs the kernel
+  EFI_FILE_PROTOCOL* Kernel = LoadFile(NULL, L"kernel.elf", ImageHandle, SystemTable); //runs the kernel
 
   while (1){};
   
   return EFI_SUCCESS; //Exits UEFI application (similar to return 0)
 }
 
-/*EFI_FILE_PROTOCOL* LoadFile(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){ //for running the kernel
+EFI_FILE_PROTOCOL* LoadFile(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){ //for running the kernel
     EFI_FILE_PROTOCOL* LoadedFile;
 
     // in gnu efi it is EFI_FILE instead of EFI_FILE_PROTOCOL
@@ -76,4 +57,4 @@ EFI_STATUS main_uefi()
     }
     return LoadedFile;
 
-}*/
+}

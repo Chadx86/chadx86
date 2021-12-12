@@ -59,9 +59,18 @@ typedef struct EFI_GUID
     UINT8     Data4[8];
 } EFI_GUID;
 
+//all guids in the uefi
 struct EFI_GUID EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID    = {0x9042a9de, 0x23dc, 0x4a38, {0x96, 0xfb, 0x7a, 0xde, 0xd0, 0x80, 0x51, 0x6a}};
 
 struct EFI_GUID EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL_GUID = {0x387477c2,0x69c7,0x11d2, {0x8e,0x39,0x00,0xa0,0xc9,0x69,0x72,0x3b}};
+
+struct EFI_GUID EFI_LOADED_IMAGE_PROTOCOL_GUID       = {0x5b1b31a1,  0x9562, 0x11d2, {0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b}};
+
+struct EFI_GUID EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID = {0x0964e5b22, 0x6459, 0x11d2, {0x8e, 0x39, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b}};
+
+struct EFI_GUID EFI_DEVICE_PATH_PROTOCOL_GUID        = {0x09576e91,  0x6d3f, 0x11d2, {0x8e, 0x39, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b}};
+
+struct EFI_GUID EFI_LOAD_FILE_PROTOCOL_GUID          = {0x56EC3091,0x954C,0x11d2, {0x8e,0x3f,0x00,0xa0, 0xc9,0x69,0x72,0x3b}};
 
 typedef struct EFI_TIME
 {
@@ -78,12 +87,13 @@ typedef struct EFI_TIME
 	UINT8      Pad2;
 } EFI_TIME;
 
-struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
-struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
-struct EFI_BOOT_SERVICES;
-struct EFI_GRAPHICS_OUTPUT_PROTOCOL;
-struct EFI_SIMPLE_FILE_SYSTEM_PROTOCOL;
-struct EFI_FILE_PROTOCOL;
+//declaring it so it does not have errors in future code
+typedef struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
+typedef struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
+typedef struct EFI_SIMPLE_FILE_SYSTEM_PROTOCOL EFI_SIMPLE_FILE_SYSTEM_PROTOCOL;
+typedef struct EFI_FILE_PROTOCOL EFI_FILE_PROTOCOL;
+typedef struct EFI_SIMPLE_FILE_SYSTEM_PROTOCOL EFI_SIMPLE_FILE_SYSTEM_PROTOCOL;
+typedef struct EFI_LOAD_FILE_PROTOCOL EFI_LOAD_FILE_PROTOCOL;
 
 typedef struct EFI_TABLE_HEADER
 {
@@ -221,7 +231,17 @@ typedef enum {
     EfiMaxMemoryType
 } EFI_MEMORY_TYPE;
 
-//File System Info
+/*
+
+  ______ _ _         _____           _                 
+ |  ____(_) |       / ____|         | |                
+ | |__   _| | ___  | (___  _   _ ___| |_ ___ _ __ ___  
+ |  __| | | |/ _ \  \___ \| | | / __| __/ _ \ '_ ` _ \ 
+ | |    | | |  __/  ____) | |_| \__ \ ||  __/ | | | | |
+ |_|    |_|_|\___| |_____/ \__, |___/\__\___|_| |_| |_|
+                            __/ |                      
+                           |___/                       
+*/
 
 typedef EFI_STATUS (*EFI_FILE_OPEN)(
     EFI_FILE_PROTOCOL *This, 
@@ -273,10 +293,27 @@ typedef EFI_STATUS (*EFI_FILE_SET_POSITION)(
 
 //////////
 
+typedef EFI_STATUS (*EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_OPEN_VOLUME)(
+    EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *This, 
+    EFI_FILE_PROTOCOL **Root
+);
+
 typedef struct EFI_SIMPLE_FILE_SYSTEM_PROTOCOL {
     UINT64                                      Revision;
     EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_OPEN_VOLUME OpenVolume;
 } EFI_SIMPLE_FILE_SYSTEM_PROTOCOL;
+
+typedef EFI_STATUS(*EFI_LOAD_FILE) (
+    EFI_LOAD_FILE_PROTOCOL *This,
+    EFI_DEVICE_PATH_PROTOCOL *FilePath,
+    BOOLEAN BootPolicy,
+    UINTN *BufferSize,
+    void *Buffer
+);
+
+typedef struct EFI_LOAD_FILE_PROTOCOL {
+    EFI_LOAD_FILE LoadFile;
+} EFI_LOAD_FILE_PROTOCOL;
 
 typedef struct EFI_FILE_PROTOCOL
 {
@@ -289,12 +326,6 @@ typedef struct EFI_FILE_PROTOCOL
     EFI_FILE_GET_POSITION   GetPosition;
     EFI_FILE_SET_POSITION   SetPosition;
 } EFI_FILE_PROTOCOL;
-
-
-typedef EFI_STATUS (*EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_OPEN_VOLUME)(
-    EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *This, 
-    EFI_FILE_PROTOCOL **Root
-);
 
 typedef struct {
     UINT64    Size;
