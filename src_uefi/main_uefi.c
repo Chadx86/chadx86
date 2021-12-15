@@ -4,6 +4,8 @@
 #include <gop.h>
 #include <fs.h>
 #include <bootinfo.h>
+#include <libc/string.h>
+#include <libc/memory.h>
 
 EFI_SYSTEM_TABLE *SystemTable;
 EFI_HANDLE *ImageHandle;
@@ -12,6 +14,8 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
 
     SystemTable = system_table;
     ImageHandle = ih;
+
+    BootInfo *bootinfo;
 
     SystemTable->ConOut->Reset(system_table->ConOut, 1);
 
@@ -39,6 +43,10 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
 
     
     //Print(L"LOADING KERNEL...\n\r");
+
+
+
+    
 
     kernel_elf_header = get_elf_header(Kernel);
     
@@ -95,17 +103,26 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
 
 
 
+    SystemTable->BootServices->AllocatePool(2, sizeof(BootInfo), (void **)&bootinfo);
+
+    bootinfo->modulec = 0;// we cannot  assume that where we allocated is 0, so we must set it to 0.
+
+    Print(L"Loading \"main.c\"...\r\n");
+
+    struct bootinfo_module* module = LoadModule(L"main.c");
+
+    if (module == 0){
+        Print(L"Failed to load module\n\r");
+        return 1;
+    }
+
+    bootinfo->modules[0].module_saddr = module->module_saddr;
+    
+    bootinfo->modules[0].module_sz =  module->module_sz;
+    bootinfo->modulec++;
 
 
-
-
-
-
-
-
-
-	
-
+    Print(L"Loaded main.c\n\r");
 
 
     //Memory Map
@@ -114,9 +131,9 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     uint64_t                  MapKey;
     uint64_t                  DescriptorSize;
     uint32_t                 DescriptorVersion;
-    BootInfo *bootinfo;
+    
 
-    SystemTable->BootServices->AllocatePool(2, sizeof(BootInfo), (void **)&bootinfo);
+    
 
     SystemTable->BootServices->AllocatePool(2, MemoryMapSize, (void **)&MemoryMap);
     
@@ -131,16 +148,16 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
 
     system_table->BootServices->ExitBootServices(ih, MapKey);
 
-    __attribute__((sysv_abi)) void (*KernelEntry)(BootInfo*) = ((__attribute__((sysv_abi)) void (*)(BootInfo*) ) kernel_elf_header->e_entry);
+    __attribute__((sysv_abi)) int (*KernelEntry)(BootInfo*) = ((__attribute__((sysv_abi)) int (*)(BootInfo*) ) kernel_elf_header->e_entry);
     
     bootinfo->mMap =  MemoryMap;
     bootinfo->mMapSize = MemoryMapSize;
     bootinfo->mMapDescSize = DescriptorSize;
 
     KernelEntry(bootinfo);
-    
 
-    //while (1){};
+    
+    while (1){}; // just hang
     
     return EFI_SUCCESS; //Exits UEFI application (similar to return 0)
 }

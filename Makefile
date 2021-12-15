@@ -42,7 +42,9 @@ disk: bexample build
 	-@mkdir ./disk/EFI/Boot
 	-@cp ./BOOTX64.EFI ./disk/EFI/Boot
 	-@cp ./example/kernel.elf ./disk
-	python3 imgbuilder.py disk disk.img
+	-@cp ./example/main.c ./disk
+	@python3 chaddisker --disk disk.img --path disk -write-directory --root /
+	@#python3 chaddisker --disk disk.img --path example/main.c -write-file --root /
 
 bexample:
 	cd example && make

@@ -1,8 +1,8 @@
 
 
-void main(void *f){
+int main(void *f){
     if (f == 0){
-        return;
+        return -1;
     }
-    while (1);
+    return 0;
 }
