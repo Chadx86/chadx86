@@ -67,19 +67,6 @@ int LoadFileIntoMem(char **buffer,EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EF
         *_fsize = fsize;
     }
 
-    
-
-    CHAR16* b;
-
-    malloc((void**)&b, sizeof(CHAR16)*200);
-
-    itoa_16(fsize, b, 10);
-
-    Print(b);
-    Print(L"\n\r");
-
-
-
     SystemTable->BootServices->AllocatePool(EfiLoaderData, fsize+1, (void**)buffer);
 
     if (*buffer == 0){
