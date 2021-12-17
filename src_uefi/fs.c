@@ -112,18 +112,12 @@ struct bootinfo_module *LoadModule(CHAR16*filename){
 
    
     if  (module ==  0){
-        Print(L"YOYOYODFAILED\n\r");
         return  0;
     }
-
-    Print(L"OPPA OPPA\n\r");
 
     module->module_sz = fsize;
 
     module->module_saddr = buffer;
-
-
-    Print(L"YYOOOOYOY\n\r");
 
     
 
