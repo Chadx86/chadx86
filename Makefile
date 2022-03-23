@@ -16,7 +16,7 @@ all: build disk
 build: BOOTX64.EFI BIOS
 
 BIOS: 
-	$(AS)) -f bin $(BIOS_SRCDIR)/boot32.asm -o bin/boot.bin
+	$(AS) -f bin $(BIOS_SRCDIR)/boot32.asm -o bin/boot.bin
 
 BOOTX64.EFI: setupDirs $(OBJ)
 	@echo [$(CC)][LINKING ALL]
