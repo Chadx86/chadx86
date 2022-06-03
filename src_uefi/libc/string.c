@@ -1,6 +1,6 @@
-#include <libc/string.h>
-#include <efi.h>
-#include <libc/memory.h>
+#include "../include/efi.h"
+#include "string.h"
+#include "memory.h"
 
 uint32_t strlen(char *str){
     int size = 0;
