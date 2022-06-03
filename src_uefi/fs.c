@@ -1,11 +1,11 @@
-#include <efi.h>
-#include <efilibs.h>
-#include <fs.h>
+#include "include/efi.h"
+#include "include/efilibs.h"
+#include "include/fs.h"
 #include <stdint.h>
-#include <libc/memory.h>
-#include <bootinfo.h>
-#include <gop.h>
-#include <libc/string.h>
+#include "memory.h"
+#include "include/bootinfo.h"
+#include "include/gop.h"
+#include "string.h"
 
 
 struct EFI_GUID EFI_LOADED_IMAGE_PROTOCOL_GUID       = {0x5b1b31a1,  0x9562, 0x11d2, {0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b}};
