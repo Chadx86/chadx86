@@ -2,9 +2,7 @@
 
 #include <stdint.h>
 
-#include "../efi.h"
-
-typedef uint16_t CHAR16; //2-byte Character
+#include <efi.h>
 
 CHAR16 *catca16(char*str); // char array to  char 16 array
 

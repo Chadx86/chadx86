@@ -1,11 +1,11 @@
-#include "include/efi.h"
-#include "include/efilibs.h"
+#include <efi.h>
+#include <efilibs.h>
 #include <elf.h>
-#include "include/gop.h"
-#include "include/fs.h"
-#include "include/bootinfo.h"
-#include "string.h"
-#include "memory.h"
+#include <gop.h>
+#include <fs.h>
+#include <bootinfo.h>
+#include <libc/string.h>
+#include <libc/memory.h>
 
 EFI_SYSTEM_TABLE *SystemTable;
 EFI_HANDLE *ImageHandle;
@@ -25,26 +25,13 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     EFI_STATUS Status;
     Elf64_Ehdr* kernel_elf_header;
 
-    EFI_GRAPHICS_OUTPUT_PROTOCOL* graphics;
-
-    Status = Print(L"Configuring GOP");
-    {
-        UINTN GraphicsOutputInfoSize;
-        EFI_GRAPHICS_OUTPUT_MODE_INFORMATION* GraphicsOutputInfo;
-        UINT32 CurrentGraphicsMode = 21;
-        if (graphics->Mode && (graphics->Mode->MaxMode - 1) < 21) {
-            CurrentGraphicsMode = graphics->Mode->MaxMode - 1;
-        }
-    }
-
     Status = SystemTable->BootServices->LocateProtocol(&EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID, 0, (void**)&gop);
     if(Status == EFI_SUCCESS)
     {
         Print(L"The GOP has been loaded successfully!\n\r");
     }
-    else{
-        Print(L"Failed to locate Graphics Output Protocol");
-    }
+
+    
 
     EFI_FILE_PROTOCOL* Kernel = LoadFile(NULL, L"kernel.elf", ImageHandle, SystemTable); //runs the kernel
 
@@ -53,8 +40,13 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
         Print(L"KERNEL FAILURE! Kernel failed to load or equals NULL \n\r");
 
     }
+
     
-    //ELF Header
+    //Print(L"LOADING KERNEL...\n\r");
+
+
+
+    
 
     kernel_elf_header = get_elf_header(Kernel);
     
@@ -68,12 +60,19 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     }
     
     Elf64_Phdr* kernel_prog_header;
+	
+    
 
     Kernel->SetPosition(Kernel, kernel_elf_header->e_phoff);
 
+    
+    
+    
+    
     uint64_t sz = kernel_elf_header->e_phnum * kernel_elf_header->e_phentsize;
     
     system_table->BootServices->AllocatePool(EfiLoaderData, sz, (void**)&kernel_prog_header);
+    
     
     Kernel->Read(Kernel, &sz, kernel_prog_header);
 
@@ -100,7 +99,12 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
 
     }
 
-    //Boot Info
+    
+    
+
+
+
+
 
     SystemTable->BootServices->AllocatePool(2, sizeof(BootInfo), (void **)&bootinfo);
 
@@ -130,7 +134,9 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     uint64_t                  MapKey;
     uint64_t                  DescriptorSize;
     uint32_t                 DescriptorVersion;
+    
 
+    
 
     SystemTable->BootServices->AllocatePool(2, MemoryMapSize, (void **)&MemoryMap);
     

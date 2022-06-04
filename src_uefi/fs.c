@@ -1,12 +1,11 @@
-#include "include/efi.h"
-#include "include/efilibs.h"
-#include "include/fs.h"
+#include <efi.h>
+#include <efilibs.h>
+#include <fs.h>
 #include <stdint.h>
-#include <stdlib.h>
-#include "memory.h"
-#include "include/bootinfo.h"
-#include "include/gop.h"
-#include "string.h"
+#include <libc/memory.h>
+#include <bootinfo.h>
+#include <gop.h>
+#include <libc/string.h>
 
 
 struct EFI_GUID EFI_LOADED_IMAGE_PROTOCOL_GUID       = {0x5b1b31a1,  0x9562, 0x11d2, {0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b}};
@@ -15,7 +14,7 @@ struct EFI_GUID EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID = {0x0964e5b22, 0x6459, 0x1
 
 struct EFI_GUID EFI_DEVICE_PATH_PROTOCOL_GUID        = {0x09576e91,  0x6d3f, 0x11d2, {0x8e, 0x39, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b}};
 
-struct EFI_GUID EFI_LOAD_FILE_PROTOCOL_GUID          = {0x56EC3091,0x954C,0x11d2, {0x8e,0x3f,0x00,0xa0, 0xc9,0x69,0x72,0x3b}};
+struct EFI_GUID EFI_LOAD_FILE_PROTOCOL_GUID     = {0x56EC3091,0x954C,0x11d2, {0x8e,0x3f,0x00,0xa0, 0xc9,0x69,0x72,0x3b}};
 
 EFI_FILE_PROTOCOL* LoadFile(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){ //for running the kernel
     EFI_FILE_PROTOCOL* LoadedFile;

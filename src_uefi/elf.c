@@ -1,5 +1,5 @@
 #include <elf.h>
-#include "include/efi.h"
+#include <efi.h>
 
 Elf64_Ehdr *get_elf_header(EFI_FILE_PROTOCOL*file){
     
