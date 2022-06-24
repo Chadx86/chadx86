@@ -6,6 +6,7 @@
 #include <bootinfo.h>
 #include <libc/string.h>
 #include <libc/memory.h>
+#include <fb.h>
 
 EFI_SYSTEM_TABLE *SystemTable;
 EFI_HANDLE *ImageHandle;
@@ -30,6 +31,18 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     {
         Print(L"The GOP has been loaded successfully!\n\r");
     }
+
+    framebuffer.BaseAddress = ((void*)gop->Mode->FrameBufferBase);
+
+    framebuffer.BufferSize = gop->Mode->FrameBufferSize;
+
+    framebuffer.Width = gop->Mode->Info->HorizontalResolution;
+
+    framebuffer.Height = gop->Mode->Info->VerticalResolution;
+
+    framebuffer.PixelsPerScanLine = gop->Mode->Info->PixelsPerScanLine;
+
+    return &framebuffer;
 
     EFI_FILE_PROTOCOL* Kernel = LoadFile(NULL, L"kernel.elf", ImageHandle, SystemTable); //runs the kernel
 
