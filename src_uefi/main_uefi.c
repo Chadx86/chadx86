@@ -31,8 +31,6 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
         Print(L"The GOP has been loaded successfully!\n\r");
     }
 
-    
-
     EFI_FILE_PROTOCOL* Kernel = LoadFile(NULL, L"kernel.elf", ImageHandle, SystemTable); //runs the kernel
 
     if(Kernel == NULL){
@@ -41,12 +39,7 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
 
     }
 
-    
-    //Print(L"LOADING KERNEL...\n\r");
-
-
-
-    
+    Print(L"LOADING KERNEL...\n\r");
 
     kernel_elf_header = get_elf_header(Kernel);
     
@@ -61,13 +54,9 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     
     Elf64_Phdr* kernel_prog_header;
 	
-    
 
     Kernel->SetPosition(Kernel, kernel_elf_header->e_phoff);
 
-    
-    
-    
     
     uint64_t sz = kernel_elf_header->e_phnum * kernel_elf_header->e_phentsize;
     
@@ -99,12 +88,6 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
 
     }
 
-    
-    
-
-
-
-
 
     SystemTable->BootServices->AllocatePool(2, sizeof(BootInfo), (void **)&bootinfo);
 
@@ -135,9 +118,6 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     uint64_t                  DescriptorSize;
     uint32_t                 DescriptorVersion;
     
-
-    
-
     SystemTable->BootServices->AllocatePool(2, MemoryMapSize, (void **)&MemoryMap);
     
     SystemTable->BootServices->GetMemoryMap(&MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize, &DescriptorVersion);
