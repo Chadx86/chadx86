@@ -11,6 +11,8 @@ extern struct EFI_GUID EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL_GUID;
 void Print(CHAR16* str);
 
 Framebuffer* initGOP(){
+    EFI_STATUS Status;
+    Elf64_Ehdr* kernel_elf_header;
 
     Status = SystemTable->BootServices->LocateProtocol(&EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID, 0, (void**)&gop);
 

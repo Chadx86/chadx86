@@ -23,26 +23,7 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     Print(L"Welcome to Chadx86 bootloader\r\n"); //or SystemTable->ConOut->OutputString(SystemTable->ConOut, L"Welcome to Chadx86 bootloader\r\n");
 
     //GOP
-    EFI_STATUS Status;
-    Elf64_Ehdr* kernel_elf_header;
-
-    Status = SystemTable->BootServices->LocateProtocol(&EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID, 0, (void**)&gop);
-    if(Status == EFI_SUCCESS)
-    {
-        Print(L"The GOP has been loaded successfully!\n\r");
-    }
-
-    framebuffer.BaseAddress = ((void*)gop->Mode->FrameBufferBase);
-
-    framebuffer.BufferSize = gop->Mode->FrameBufferSize;
-
-    framebuffer.Width = gop->Mode->Info->HorizontalResolution;
-
-    framebuffer.Height = gop->Mode->Info->VerticalResolution;
-
-    framebuffer.PixelsPerScanLine = gop->Mode->Info->PixelsPerScanLine;
-
-    return &framebuffer;
+    initGOP();
 
     EFI_FILE_PROTOCOL* Kernel = LoadFile(NULL, L"kernel.elf", ImageHandle, SystemTable); //runs the kernel
 
