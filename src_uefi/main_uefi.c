@@ -148,16 +148,13 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     
     Print(L"loading kernel.elf...\n\r");
 
-
-    system_table->BootServices->ExitBootServices(ih, MapKey);
-
     __attribute__((sysv_abi)) int (*KernelEntry)(BootInfo*) = ((__attribute__((sysv_abi)) int (*)(BootInfo*) ) kernel_elf_header->e_entry);
     
     bootinfo->mMap =  MemoryMap;
     bootinfo->mMapSize = MemoryMapSize;
     bootinfo->mMapDescSize = DescriptorSize;
 
-    SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey); // exit boot services
+    system_table->BootServices->ExitBootServices(ih, MapKey); // exit boot services
 
     KernelEntry(bootinfo);
 
