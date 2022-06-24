@@ -104,7 +104,6 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
 
     Print(L"Loaded main.c\n\r");
 
-
     //Memory Map
     uint64_t                  MemoryMapSize = 0;
     EFI_MEMORY_DESCRIPTOR  *MemoryMap;
@@ -122,15 +121,33 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     
     Print(L"loading kernel.elf...\n\r");
 
-    __attribute__((sysv_abi)) int (*KernelEntry)(BootInfo*) = ((__attribute__((sysv_abi)) int (*)(BootInfo*) ) kernel_elf_header->e_entry);
-    
+    __attribute__((sysv_abi)) int (*KernelEntry)(Framebuffer*, FONT, BootInfo*) = ((__attribute__((sysv_abi)) int (*)(BootInfo*) ) kernel_elf_header->e_entry);
+    FONT* kernelFont = LoadFont(NULL, L"Unifont-APL8x16-13.0.06.psf", ih, system_table);
+
+    Print(L"Loading PSF FONT");
+
+    if(kernelFont == NULL){
+        Print(L"Font could not be loaded\n\r");
+    }
+    else{
+        Print(L"Font Loaded!");
+    }
+
     bootinfo->mMap =  MemoryMap;
     bootinfo->mMapSize = MemoryMapSize;
     bootinfo->mMapDescSize = DescriptorSize;
 
     system_table->BootServices->ExitBootServices(ih, MapKey); // exit boot services
 
-    KernelEntry(bootinfo);
+    Framebuffer* kernelBuffer = initGOP();
+
+    kernelBuffer->BaseAddress;
+    kernelBuffer->BufferSize;
+    kernelBuffer->Width;
+    kernelBuffer->Height; 
+    kernelBuffer->PixelsPerScanLine;
+
+    KernelEntry(kernelBuffer, kernelFont, bootinfo);
     
     while (1){}; // just hang
     
