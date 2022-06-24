@@ -157,7 +157,6 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     system_table->BootServices->ExitBootServices(ih, MapKey); // exit boot services
 
     KernelEntry(bootinfo);
-
     
     while (1){}; // just hang
     
