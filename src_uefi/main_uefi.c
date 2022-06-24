@@ -157,6 +157,8 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     bootinfo->mMapSize = MemoryMapSize;
     bootinfo->mMapDescSize = DescriptorSize;
 
+    SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey); // exit boot services
+
     KernelEntry(bootinfo);
 
     
