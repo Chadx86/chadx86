@@ -35,6 +35,7 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
 
     Print(L"LOADING KERNEL...\n\r");
 
+    Elf64_Ehdr* kernel_elf_header;
     kernel_elf_header = get_elf_header(Kernel);
     
 

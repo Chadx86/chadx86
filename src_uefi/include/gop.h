@@ -1,6 +1,7 @@
 #pragma once
 #include <fb.h>
 #include <efi.h>
+#include <elf.h>
 
 extern EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE *gop;
 
@@ -11,7 +12,6 @@ void Print(CHAR16* str);
 
 Framebuffer* initGOP(){
     EFI_STATUS Status;
-    Elf64_Ehdr* kernel_elf_header;
 
     Status = SystemTable->BootServices->LocateProtocol(&EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID, 0, (void**)&gop);
 
@@ -19,15 +19,15 @@ Framebuffer* initGOP(){
         Print(L"The GOP has been loaded successfully!\n\r");
     }
 
-    framebuffer.BaseAddress = ((void*)gop->Mode->FrameBufferBase);
+    fb.BaseAddress = ((void*)gop->Mode->FrameBufferBase);
 
-    framebuffer.BufferSize = gop->Mode->FrameBufferSize;
+    fb.BufferSize = gop->Mode->FrameBufferSize;
 
-    framebuffer.Width = gop->Mode->Info->HorizontalResolution;
+    fb.Width = gop->Mode->Info->HorizontalResolution;
 
-    framebuffer.Height = gop->Mode->Info->VerticalResolution;
+    fb.Height = gop->Mode->Info->VerticalResolution;
 
-    framebuffer.PixelsPerScanLine = gop->Mode->Info->PixelsPerScanLine;
+    fb.PixelsPerScanLine = gop->Mode->Info->PixelsPerScanLine;
 
     return &fb;
 }

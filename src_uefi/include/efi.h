@@ -778,6 +778,9 @@ typedef struct {
     UINTN SizeOfInfo; //Size of Info structure in bytes. Future versions of this specification may increase the size of the EFI_GRAPHICS_OUTPUT_MODE_INFORMATION data.
     EFI_PHYSICAL_ADDRESS FrameBufferBase; //Base address of graphics linear frame buffer
     UINTN FrameBufferSize; //Amount of frame buffer needed to support the active mode as defined by PixelsPerScanLine x VerticalResolution x PixelElementSize.
+    UINT32 PixelsPerScanLine; //Defines the number of pixel elements per video memory line
+    UINT32 HorizontalResolution; //The size of video screen in pixels in the X dimension.
+    UINT32 VerticalResolution; //The size of video screen in pixels in the Y dimension.
 } EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE;
 
 //Defining QUERY MODE
