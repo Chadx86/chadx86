@@ -10,3 +10,24 @@ void Print(CHAR16* str)
 {
     SystemTable->ConOut->OutputString(SystemTable->ConOut, str);
 }
+
+Framebuffer* initGOP(){
+    EFI_STATUS Status;
+
+    Status = SystemTable->BootServices->LocateProtocol(&EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID, 0, (void**)&gop);
+
+    if(Status == EFI_SUCCESS){
+        Print(L"The GOP has been loaded successfully!\n\r");
+    }
+    else{
+        Print(L"The GOP has either failed to load or can not be located");
+    }
+
+    fb.BaseAddress = ((void*)gop->Mode->FrameBufferBase);
+    fb.BufferSize = gop->Mode->FrameBufferSize;
+    fb.Width = gop->Mode->Info->HorizontalResolution;
+    fb.Height = gop->Mode->Info->VerticalResolution;
+    fb.PixelsPerScanLine = gop->Mode->Info->PixelsPerScanLine;
+
+    return &fb;
+}

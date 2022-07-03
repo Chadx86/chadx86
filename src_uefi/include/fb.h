@@ -3,15 +3,14 @@
 #include <efi.h>
 #include <elf.h>
 
+extern struct EFI_GUID EFI_LOADED_IMAGE_PROTOCOL_GUID;
+extern struct EFI_GUID EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID;
+
 typedef struct {
-        void* BaseAddress; // a void pointer holds the address of any type of variable
+    void* BaseAddress; // a void pointer holds the address of any type of variable
     size_t BufferSize; // controls how big the buffer is (a buffer is a little place of data)
-    // A framebuffer (frame buffer, or sometimes framestore) is a portion of random-access memory (RAM) containing a bitmap that drives a video display.
-    // Signed vales can be both negative and positive (-50/50)
-    // Unsigned values on the other hand, don't allow negative numbers (0/100)
-    unsigned int Width;
+    unsigned int Width, Height;
     // screen height and width
-    unsigned int Height;
     unsigned int PixelsPerScanLine; // Pixels per scan line is how you determinine your refresh rate
 } Framebuffer; // the name of the class and what this class does is outputs the pixels
 
@@ -31,51 +30,5 @@ typedef struct {
     void* glyphBuffer; // keeps data about the piece of text or character
 } FONT;
 
-FONT* LoadFont(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){
-
-        EFI_FILE_PROTOCOL* font = LoadFile(Directory, Path, ImageHandle, SystemTable);
-
-        if(font == NULL){
-            return NULL;
-        }
-
-        FONT_HEADER* fontHeader;
-
-        SystemTable->BootServices->AllocatePool(EfiLoaderData, sizeof(FONT_HEADER), (void**)&fontHeader);
-        UINTN size = sizeof(FONT_HEADER);
-        font->Read(font, &size, fontHeader);
-
-        if(fontHeader->magic[0] != FONT_MAGIC0 || fontHeader->magic[1] != FONT_MAGIC1){
-
-            return NULL;
-
-        }
-
-        UINTN glyphBufferSize = fontHeader->charsize * 256;
-
-        if(fontHeader->mode == 1) { //512 glyph mode
-        
-            glyphBufferSize = fontHeader->charsize * 512;
-
-        }
-
-        void* glyphBuffer; {
-
-            font->SetPosition(font, sizeof(FONT_HEADER));
-
-            SystemTable->BootServices->AllocatePool(EfiLoaderData, glyphBufferSize, (void**)&glyphBuffer);
-
-            font->Read(font, &glyphBufferSize, glyphBuffer);
-
-        }
-
-        FONT* finishedFont;
-
-        SystemTable->BootServices->AllocatePool(EfiLoaderData, sizeof(FONT), (void**)&finishedFont);
-
-        finishedFont->fontHdr = fontHeader;
-
-        finishedFont->glyphBuffer = glyphBuffer;
-
-        return finishedFont;
-    }
+EFI_FILE_PROTOCOL* LoadFile(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable);
+FONT* LoadFont(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable);
