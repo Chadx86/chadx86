@@ -14,7 +14,7 @@ typedef struct {
     unsigned int PixelsPerScanLine; // Pixels per scan line is how you determinine your refresh rate
 } Framebuffer; // the name of the class and what this class does is outputs the pixels
 
-Framebuffer fb;
+extern Framebuffer fb;
 
 #define FONT_MAGIC0 0x36
 #define FONT_MAGIC1 0x04

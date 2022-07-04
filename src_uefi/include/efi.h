@@ -830,4 +830,3 @@ typedef struct EFI_GRAPHICS_OUTPUT_PROTCOL { //GOP
     EFI_GRAPHICS_OUTPUT_PROTOCOL_BLT Blt; //Software abstraction to draw on the video device’s frame buffer
     EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE *Mode; //Pointer to EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE data.
 } EFI_GRAPHICS_OUTPUT_PROTOCOL;
-

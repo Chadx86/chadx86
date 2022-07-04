@@ -13,6 +13,8 @@ extern EFI_GUID gEfiLoadedImageProtocolGuid;
 #define LoadedImageProtocol gEfiLoadedImageProtocolGuid
 extern EFI_GUID gEfiSimpleTextInProtocolGuid;
 
+Framebuffer fb;
+
 EFI_FILE_PROTOCOL* LoadFile(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){ // uefi treats directories as files 
     EFI_FILE_PROTOCOL* LoadedFile;
         

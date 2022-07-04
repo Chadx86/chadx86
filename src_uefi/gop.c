@@ -1,6 +1,6 @@
 #include <gop.h>
 
-EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE *gop;
+EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
 
 
 struct EFI_GUID EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID    = {0x9042a9de, 0x23dc, 0x4a38, {0x96, 0xfb, 0x7a, 0xde, 0xd0, 0x80, 0x51, 0x6a}};
