@@ -1,3 +1,7 @@
+//#ifndef FB_H
+//#define FB_H
+
+#pragma once
 #include "stdint.h"
 #include "stddef.h"
 #include <efi.h>
@@ -32,3 +36,4 @@ typedef struct {
 
 EFI_FILE_PROTOCOL* LoadFile(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable);
 FONT* LoadFont(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable);
+//#endif

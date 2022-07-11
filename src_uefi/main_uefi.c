@@ -103,7 +103,7 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
 
     SystemTable->BootServices->AllocatePool(2, sizeof(BootInfo), (void **)&bootinfo);
 
-    bootinfo->modulec = 0;// we cannot  assume that where we allocated is 0, so we must set it to 0.
+    bootinfo->modulec = 0;// we cannot assume that where we allocated is 0, so we must set it to 0.
 
     Print(L"Loading \"main.c\"...\r\n");
 
@@ -124,10 +124,10 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
 
     //Memory Map
     uint64_t                  MemoryMapSize = 0;
-    EFI_MEMORY_DESCRIPTOR  *MemoryMap;
+    EFI_MEMORY_DESCRIPTOR    *MemoryMap;
     uint64_t                  MapKey;
     uint64_t                  DescriptorSize;
-    uint32_t                 DescriptorVersion;
+    uint32_t                  DescriptorVersion;
     
     SystemTable->BootServices->AllocatePool(2, MemoryMapSize, (void **)&MemoryMap);
     
@@ -136,7 +136,7 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     SystemTable->BootServices->AllocatePool(2, MemoryMapSize, (void **)&MemoryMap);
     SystemTable->BootServices->GetMemoryMap(&MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize, &DescriptorVersion);	
     
-    Print(L"loading kernel.elf...\n\r");
+    Print(L"Loading kernel.elf...\n\r");
 
     __attribute__((sysv_abi)) int (*KernelEntry)(Framebuffer*, FONT, BootInfo*) = ((__attribute__((sysv_abi)) int (*)(BootInfo*) ) kernel_elf_header->e_entry);
     FONT* kernelFont = LoadFont(NULL, L"Unifont-APL.psf", ih, system_table);
