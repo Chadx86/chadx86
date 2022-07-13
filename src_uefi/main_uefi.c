@@ -138,7 +138,7 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     
     Print(L"Loading kernel.elf...\n\r");
 
-    __attribute__((sysv_abi)) int (*KernelEntry)(Framebuffer*, FONT, BootInfo*) = ((__attribute__((sysv_abi)) int (*)(BootInfo*) ) kernel_elf_header->e_entry);
+    __attribute__((sysv_abi)) int (*KernelEntry)(Framebuffer*, FONT*, BootInfo*) = ((__attribute__((sysv_abi)) int (*)(Framebuffer*, FONT*, BootInfo*) ) kernel_elf_header->e_entry);
     FONT* kernelFont = LoadFont(NULL, L"Unifont-APL.psf", ih, system_table);
 
     Print(L"Loading PSF FONT");
@@ -158,11 +158,11 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
 
     Framebuffer* kernelBuffer = initGOP();
 
-    kernelBuffer->BaseAddress;
-    kernelBuffer->BufferSize;
-    kernelBuffer->Width;
-    kernelBuffer->Height; 
-    kernelBuffer->PixelsPerScanLine;
+    //kernelBuffer->BaseAddress;
+    //kernelBuffer->BufferSize;
+    //kernelBuffer->Width;
+    //kernelBuffer->Height; 
+    //kernelBuffer->PixelsPerScanLine;
 
     KernelEntry(kernelBuffer, kernelFont, bootinfo);
     

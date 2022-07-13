@@ -49,7 +49,53 @@ uint64_t GetFileSize (EFI_FILE_PROTOCOL* file)
     return Size;
 }
 
+FONT* LoadFont(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){
+    EFI_FILE_PROTOCOL* font = LoadFile(Directory, Path, ImageHandle, SystemTable);
 
+    if(font == NULL){
+        return NULL;
+    }
+
+    FONT_HEADER* fontHeader;
+
+    SystemTable->BootServices->AllocatePool(EfiLoaderData, sizeof(FONT_HEADER), (void**)&fontHeader);
+    UINTN size = sizeof(FONT_HEADER);
+    font->Read(font, &size, fontHeader);
+
+    if(fontHeader->magic[0] != FONT_MAGIC0 || fontHeader->magic[1] != FONT_MAGIC1){
+
+        return NULL;
+
+    }
+
+    UINTN glyphBufferSize = fontHeader->charsize * 256;
+
+    if(fontHeader->mode == 1) { //512 glyph mode
+            
+        glyphBufferSize = fontHeader->charsize * 512;
+
+    }
+
+    void* glyphBuffer; {
+
+        font->SetPosition(font, sizeof(FONT_HEADER));
+
+        SystemTable->BootServices->AllocatePool(EfiLoaderData, glyphBufferSize, (void**)&glyphBuffer);
+
+        font->Read(font, &glyphBufferSize, glyphBuffer);
+
+    }
+
+    FONT* finishedFont;
+
+    SystemTable->BootServices->AllocatePool(EfiLoaderData, sizeof(FONT), (void**)&finishedFont);
+
+    finishedFont->fontHdr = fontHeader;
+
+    finishedFont->glyphBuffer = glyphBuffer;
+
+    return finishedFont;
+}
 
 
 int LoadFileIntoMem(char **buffer,EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable, uint64_t*_fsize){

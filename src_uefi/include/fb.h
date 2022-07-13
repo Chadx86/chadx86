@@ -7,9 +7,6 @@
 #include <efi.h>
 #include <elf.h>
 
-extern struct EFI_GUID EFI_LOADED_IMAGE_PROTOCOL_GUID;
-extern struct EFI_GUID EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID;
-
 typedef struct {
     void* BaseAddress; // a void pointer holds the address of any type of variable
     size_t BufferSize; // controls how big the buffer is (a buffer is a little place of data)
@@ -34,6 +31,5 @@ typedef struct {
     void* glyphBuffer; // keeps data about the piece of text or character
 } FONT;
 
-EFI_FILE_PROTOCOL* LoadFile(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable);
 FONT* LoadFont(EFI_FILE_PROTOCOL* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable);
 //#endif
