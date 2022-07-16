@@ -19,4 +19,4 @@ UEFI Specs 2.9: https://uefi.org/sites/default/files/resources/UEFI_Spec_2_9_202
 ![chadx86 bios](https://user-images.githubusercontent.com/45809332/144059985-43b66315-3f03-4c9e-abda-2e918c6b5ca3.PNG)
 
 ## UEFI Booting: 
-![Capture](https://user-images.githubusercontent.com/45809332/146465056-5f3af86d-9cee-4df4-8235-a5dc0ff3d398.PNG)
+![chad_qemu](https://user-images.githubusercontent.com/45809332/179342733-418e0e52-5814-4670-a752-7453071459c6.PNG)
