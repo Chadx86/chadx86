@@ -20,8 +20,6 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
 
     SystemTable->ConOut->Reset(system_table->ConOut, 1);
 
-    Print(L"Welcome to Chadx86 bootloader\r\n"); //or SystemTable->ConOut->OutputString(SystemTable->ConOut, L"Welcome to Chadx86 bootloader\r\n");
-    Print(L"\r\n");
     Print(L"                               $@..,,,.@@$             \r\n");                             
     Print(L"                       @.$..@..@....*..,.@,.           \r\n");                       
     Print(L"                      .$.,,..@..@...*&..&.$..          \r\n");                   
@@ -35,10 +33,8 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     Print(L"                     (@#..&&..$....$.........          \r\n");                        
     Print(L"                    &.@@$..&..... .......,&&&&&&.      \r\n");                        
     Print(L"                     (@.$.,$#.#......@&&&@&&&&&&&&&@@  \r\n");                     
-    Print(L"                            &@@&&&@@&&&&@&&&&&&&&&@    \r\n");                     
-    Print(L"                           &&&&&&&&&&&&&&@             \r\n");                     
-                                                                                
-
+    Print(L"                            &@@&&&@@&&&&@&&&&&&&&&@    \r\n");
+    Print(L"Welcome to Chadx86 bootloader!\r\n"); //or SystemTable->ConOut->OutputString(SystemTable->ConOut, L"Welcome to Chadx86 bootloader\r\n");
     //GOP
     initGOP();
 
@@ -141,13 +137,13 @@ EFI_STATUS main_uefi(EFI_HANDLE ih, EFI_SYSTEM_TABLE *system_table){
     __attribute__((sysv_abi)) int (*KernelEntry)(Framebuffer*, FONT*, BootInfo*) = ((__attribute__((sysv_abi)) int (*)(Framebuffer*, FONT*, BootInfo*) ) kernel_elf_header->e_entry);
     FONT* kernelFont = LoadFont(NULL, L"Unifont-APL.psf", ih, system_table);
 
-    Print(L"Loading PSF FONT");
+    Print(L"Loading PSF FONT...\n\r");
 
     if(kernelFont == NULL){
         Print(L"Font could not be loaded\n\r");
     }
     else{
-        Print(L"Font Loaded!");
+        Print(L"Font Loaded!\n\r");
     }
 
     bootinfo->mMap =  MemoryMap;
